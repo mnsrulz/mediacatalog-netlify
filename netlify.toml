@@ -3,8 +3,8 @@
   functions = "functions"
 
 [[redirects]]
-  from = "/api/p2"
-  to = "/.netlify/functions/server/another"
+  from = "/api/p2/*"
+  to = "/.netlify/functions/server/:splat"
   status = 301
   force = false
 
