@@ -10,6 +10,6 @@
 
 [[redirects]]
   from = "/api/p1"
-  to = "/.netlify/functions/server/another"
+  to = "https://mediacatalog.netlify.app/.netlify/functions/server/another"
   status = 200
   force = true
