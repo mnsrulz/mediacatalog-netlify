@@ -1,0 +1,32 @@
+{
+  "name": "nurlresolver-netlify",
+  "version": "1.0.0",
+  "description": "nurlresolver host on netlify",
+  "main": "functions/server.js",
+  "scripts": {
+    "build": "netlify-lambda build express --config ./webpack.config.js",
+    "build:serve": "netlify-lambda serve express --config ./webpack.config.js",
+    "start": "nodemon server-local.js",
+    "postinstall": "netlify-lambda install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mnsrulz/nurlresolver-netlify.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mnsrulz/nurlresolver-netlify/issues"
+  },
+  "homepage": "https://github.com/mnsrulz/nurlresolver-netlify#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "emitter": "0.0.5",
+    "express": "^4.17.1",
+    "netlify-lambda": "^2.0.1",
+    "nodemon": "^2.0.4",
+    "serverless-http": "^2.6.0"
+  }
+}
