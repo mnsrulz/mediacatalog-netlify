@@ -1,1 +1,2 @@
-/api/p1 /.netlify/functions/server/another
+/api/p1 /.netlify/functions/server/another 200
+/api/p2/* /.netlify/functions/server/ 200
