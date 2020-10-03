@@ -8,7 +8,7 @@ const router = express.Router();
 const cors = require('cors');
 
 router.get('/movies', async (req, res) => {
-  return {
+  const data = {
     data: [
       {
         title: "Test1",
@@ -16,6 +16,7 @@ router.get('/movies', async (req, res) => {
       }
     ]
   }
+  res.json(data);
 });
 
 router.get('/another', (req, res) => res.json({ route: req.originalUrl }));
