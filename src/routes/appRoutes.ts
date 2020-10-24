@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import express from "express";
 
 import { PlaylistController } from "../controllers/PlaylistController";
-const playlistController = new PlaylistController();
 
 export class Routes {
     // public directoryController = new DirectoryController();
@@ -11,12 +10,13 @@ export class Routes {
     // public linkCacheController = new LinkCacheController();
     // public searchController = new SearchController();
 
+    public playlistController = new PlaylistController();
 
     public routes(app: express.Application): void {
         
-        app.route('/playlists').get(mw, playlistController.list);
-        app.route('/playlists/:playlistId').get(playlistController.get);
-        app.route('/playlists').post(playlistController.create);
+        app.route('/playlists').get(mw, this.playlistController.list);
+        app.route('/playlists/:playlistId').get(this.playlistController.get);
+        app.route('/playlists').post(this.playlistController.create);
         // app.route('/playlists/:playlistId/items').post(playlistController.create);
 
         // app.route('/').get(mw, this.directoryController.getRoot);

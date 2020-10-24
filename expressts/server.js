@@ -10,6 +10,7 @@ const app = require('../dist/app').default;
 // const router = express.Router();
 // const cors = require('cors');
 
+console.log('bootstraping the serverjs file.');
 
 module.exports = app;
 module.exports.handler = serverless(app);
