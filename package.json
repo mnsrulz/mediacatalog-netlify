@@ -5,7 +5,7 @@
   "main": "functions/server.js",
   "scripts": {
     "compile":"tsc -p .",
-    "build": "netlify-lambda build dist --config ./webpack.config.js",
+    "build": "netlify-lambda build expressts --config ./webpack.config.js",
     "build:serve": "netlify-lambda serve express --config ./webpack.config.js",
     "start": "nodemon server-local.js",
     "postinstall": "netlify-lambda install"
