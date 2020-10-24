@@ -14,7 +14,7 @@ export class Routes {
 
     public routes(app: express.Application): void {
         
-        app.route('/playlists').get(playlistController.list);
+        app.route('/playlists').get(mw, playlistController.list);
         app.route('/playlists/:playlistId').get(playlistController.get);
         app.route('/playlists').post(playlistController.create);
         // app.route('/playlists/:playlistId/items').post(playlistController.create);
@@ -40,15 +40,15 @@ export class Routes {
         // app.route('/api/links').get(this.linkCacheController.getLinks);
         // app.route('/api/links/refresh/:documentId').post(this.linkCacheController.refresh);
 
-        // function mw(req: Request, res: Response, next: NextFunction) {
-        //     logger.info(`${req.method} ${decodeURI(req.originalUrl)}`);
-        //     if (req.originalUrl.endsWith('/')) {
-        //         res.setHeader('content-type', 'text/html');
-        //         next();
-        //     } else {
-        //         res.redirect(req.originalUrl + '/');
-        //     }
-        // }
+        function mw(req: Request, res: Response, next: NextFunction) {
+            console.log(`${req.method} ${decodeURI(req.originalUrl)}`);
+            if (req.originalUrl.endsWith('/')) {
+                res.setHeader('content-type', 'text/html');
+                next();
+            } else {
+                res.redirect(req.originalUrl + '/');
+            }
+        }
 
         // function send405(req: Request, res: Response, next: NextFunction) {
         //     res.sendStatus(405);
