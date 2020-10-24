@@ -1,16 +1,9 @@
 'use strict';
-// const express = require('express');
-// const path = require('path');
 const serverless = require('serverless-http');
-
-const app = require('../dist/app').default;
-// const app = express();
-
-// const bodyParser = require('body-parser');
-// const router = express.Router();
-// const cors = require('cors');
+const appModule = require('../dist/app');
+const _workingApp = appModule.createApp('/.netlify/functions/server')
 
 console.log('bootstraping the serverjs file.');
 
-module.exports = app;
-module.exports.handler = serverless(app);
+module.exports = _workingApp;
+module.exports.handler = serverless(_workingApp);
