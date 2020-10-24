@@ -3,7 +3,7 @@
 // const path = require('path');
 const serverless = require('serverless-http');
 
-const app = require('../dist/app')
+const app = require('../dist/app').default;
 // const app = express();
 
 // const bodyParser = require('body-parser');
