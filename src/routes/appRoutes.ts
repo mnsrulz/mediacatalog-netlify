@@ -17,21 +17,9 @@ export class ApplicationRoutes {
   constructor() {
     this.router = express.Router();
     this.playlistController = new PlaylistController();
-    this.router.route("/playlists").get(mw, this.playlistController.list);
-    this.router.route("/playlists/:playlistId").get(
-      this.playlistController.get,
-    );
+    this.router.route("/playlists").get(this.playlistController.list);
+    this.router.route("/playlists/:playlistId").get(this.playlistController.get);
     this.router.route("/playlists").post(this.playlistController.create);
-
-    function mw(req: Request, res: Response, next: NextFunction) {
-      console.log(`${req.method} ${decodeURI(req.originalUrl)}`);
-      if (req.originalUrl.endsWith("/")) {
-        res.setHeader("content-type", "text/html");
-        next();
-      } else {
-        res.redirect(req.originalUrl + "/");
-      }
-    }
   }
 
   public getRoutes(): IRouter {
