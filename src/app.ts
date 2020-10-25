@@ -33,7 +33,7 @@ class App {
     //auth
     const userName = process.env.adminUserName || "admin";
     const password = process.env.adminPassword || "admin";
-    const realm = process.env.realm || "media-catalog-directory";
+    const realm = process.env.realm || "media-catalog-api";
 
     let users: { [username: string]: string } = {};
     users[userName] = password;
