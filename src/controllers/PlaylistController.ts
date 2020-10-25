@@ -9,15 +9,13 @@ export class PlaylistController {
   public async list(req: Request, res: Response) {
     console.log("calling list...");
     const playlists = await _playlistService.getAll();
-    // const result: FileNode[] = await mediaService.fetchYearsByMediaType();
-    // const output = await DirectoryController.GetRenderData(req.url, result);
-    // const output = [{ test: "test123" }, { test: "second playlist" }];
     res.json(playlists);
   }
 
   public async get(req: Request, res: Response) {
-    const output = { test: "get test123" };
-    res.json(output);
+    const playlistId = req.params.playlistId;
+    const playlist = await _playlistService.getById(playlistId);
+    res.json(playlist);
   }
 
   public async create(req: Request, res: Response) {

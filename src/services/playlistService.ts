@@ -11,4 +11,10 @@ export class PlaylistService {
     const result = playlists.map((x) => x as Playlist);
     return result;
   }
+
+  public async getById(id:String): Promise<Playlist> {
+    var playlist: any = await PlaylistDataService.findById(id);
+    const result = playlist as Playlist;
+    return result;
+  }
 }
