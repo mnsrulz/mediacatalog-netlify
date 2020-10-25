@@ -2,14 +2,16 @@ import express from "express";
 import * as bodyParser from "body-parser";
 
 import { ApplicationRoutes } from "./routes/appRoutes";
-// import mongoose from "mongoose";
+import mongoose from "mongoose";
 import basicAuth from "express-basic-auth";
 import cors from "cors";
 
+const mongoUrl: string = process.env.MONGODB_URI || '';
+
 class App {
   // public app: express.Application = express();
-  // public applicationRoutes: ApplicationRoutes = new ApplicationRoutes();
-  // public mongoUrl: string = process.env.MONGODB_URI || "";
+  // public applicationRoutes: ApplicationRoutes = new ApplicationRoutes();  
+  
 
   // constructor(baseUrl: string) {
   //   this.config();
@@ -40,6 +42,9 @@ class App {
       challenge: true,
       realm: realm,
     }));
+
+    //db init
+    mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 
     //setup routes
     app.use(baseUrl || "/", applicationRoutes.getRoutes());
