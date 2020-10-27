@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/mnsrulz/nurlresolver-netlify#readme",
   "dependencies": {
-    "mongoose": "^5.10.10"
+    "mongoose": "^5.10.11"
   },
   "devDependencies": {
     "@types/cors": "^2.8.8",
