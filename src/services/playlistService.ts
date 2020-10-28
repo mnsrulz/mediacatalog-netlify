@@ -3,7 +3,7 @@ import * as mongoose from "mongoose";
 import { PlaylistSchema } from "../models/schemas";
 import { Playlist } from "../models/playlist";
 
-const PlaylistDataService = mongoose.model("MediaCatalog", PlaylistSchema);
+const PlaylistDataService = mongoose.model("PlaylistSchema", PlaylistSchema);
 
 export class PlaylistService {
   public async getAll(): Promise<Playlist[]> {

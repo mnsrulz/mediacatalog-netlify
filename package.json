@@ -8,7 +8,8 @@
     "build": "netlify-lambda build dist/netlify-server --config ./webpack.config.js",
     "build:serve": "netlify-lambda serve express --config ./webpack.config.js",
     "start": "nodemon server-local.js",
-    "postinstall": "netlify-lambda install"
+    "postinstall": "netlify-lambda install",
+    "start:watch": "tsc-watch --onSuccess \"node server-local.js\""
   },
   "repository": {
     "type": "git",
@@ -36,6 +37,7 @@
     "nodemon": "^2.0.4",
     "serverless-http": "^2.6.0",
     "ts-node": "^9.0.0",
+    "tsc-watch": "^4.2.9",
     "typescript": "^4.0.3"
   }
 }
