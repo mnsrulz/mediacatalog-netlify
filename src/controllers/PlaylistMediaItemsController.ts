@@ -17,4 +17,15 @@ export class PlaylistMediaItemsController {
     );
     res.sendStatus(200);
   }
+
+  public async deleteMediaItemToPlaylist(req: Request, res: Response) {
+    const mediaId = req.body.mediaId;
+    console.log(req.body);
+    await _playlistMediaItemService.removeMediaItemFromPlaylist(
+      mediaId,
+      req.params.playlistId,
+    );
+    res.sendStatus(200);
+  }
+  
 }

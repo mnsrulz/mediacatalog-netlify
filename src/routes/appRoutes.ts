@@ -35,6 +35,9 @@ export class ApplicationRoutes {
     this.router.route("/playlists/:playlistId/items").post(
       this.playlistMediaItemsController.addMediaItemToPlaylist,
     );
+    this.router.route("/playlists/:playlistId/items").delete(
+      this.playlistMediaItemsController.deleteMediaItemToPlaylist,
+    );
 
     this.router.route("/items").get(this.mediaItemsController.list);
     this.router.route("/items").post(this.mediaItemsController.createMediaItem);

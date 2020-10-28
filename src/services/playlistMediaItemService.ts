@@ -51,7 +51,7 @@ export class PlaylistMediaItemService {
       if (doc.playlistIds.includes(playlistId)) {
         console.log("Item already exists in the playlist");
       } else {
-        console.log("media to modify...", doc);      
+        console.log("media to modify...", doc);
         await MediaItemDataService.updateOne({ _id: doc._id }, {
           $push: {
             playlistIds: playlistId,
@@ -60,6 +60,26 @@ export class PlaylistMediaItemService {
       }
     } else {
       console.log("document not found...");
+    }
+  }
+
+  public async removeMediaItemFromPlaylist(
+    mediaId: any,
+    playlistId: any,
+  ): Promise<void> {
+    const doc: any = await MediaItemDataService.findById(mediaId);
+    if (doc) {
+      if (doc.playlistIds.includes(playlistId)) {
+        await MediaItemDataService.updateOne({ _id: doc._id }, {
+          $pull: {
+            playlistIds: playlistId,
+          },
+        });
+      } else {
+        console.log("Item does not exists in the playlist");
+      }
+    } else {
+      console.log("document not found with mediaId:", mediaId);
     }
   }
 }
