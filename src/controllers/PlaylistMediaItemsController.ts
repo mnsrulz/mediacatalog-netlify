@@ -18,19 +18,3 @@ export class PlaylistMediaItemsController {
     res.sendStatus(200);
   }
 }
-
-export class MediaItemsController {
-  public async list(req: Request, res: Response) {
-    const items = await _playlistMediaItemService.getItems();
-    res.json(items);
-  }
-  public async get(req: Request, res: Response) {
-    const item = await _playlistMediaItemService.get(req.params.mediaItemId);
-    res.json(item);
-  }
-
-  public async createMediaItem(req: Request, res: Response) {
-    await _playlistMediaItemService.addMediaItem(req.body);
-    res.sendStatus(201);
-  }
-}

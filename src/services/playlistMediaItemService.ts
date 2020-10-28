@@ -46,15 +46,18 @@ export class PlaylistMediaItemService {
     mediaId: any,
     playlistId: any,
   ): Promise<void> {
-    //check if the item exists or not
-    const doc = await MediaItemDataService.findById(mediaId);
+    const doc: any = await MediaItemDataService.findById(mediaId);
     if (doc) {
-      console.log("media to modify...", doc);
-      await MediaItemDataService.updateOne({ _id: doc._id }, {
-        $push: {
-          playlistIds: playlistId,
-        },
-      });
+      if (doc.playlistIds.includes(playlistId)) {
+        console.log("Item already exists in the playlist");
+      } else {
+        console.log("media to modify...", doc);      
+        await MediaItemDataService.updateOne({ _id: doc._id }, {
+          $push: {
+            playlistIds: playlistId,
+          },
+        });
+      }
     } else {
       console.log("document not found...");
     }

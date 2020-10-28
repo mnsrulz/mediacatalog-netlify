@@ -2,7 +2,8 @@ import { Request, Response, NextFunction, IRouter } from "express";
 import express from "express";
 
 import { PlaylistController } from "../controllers/PlaylistController";
-import {PlaylistMediaItemsController, MediaItemsController} from '../controllers/PlaylistMediaItemsController';
+import { PlaylistMediaItemsController } from "../controllers/PlaylistMediaItemsController";
+import { MediaItemsController } from "../controllers/MediaItemsController";
 
 export class ApplicationRoutes {
   // public directoryController = new DirectoryController();
@@ -12,8 +13,8 @@ export class ApplicationRoutes {
   // public searchController = new SearchController();
   router: IRouter;
   playlistController: PlaylistController;
-  playlistMediaItemsController:PlaylistMediaItemsController;
-  mediaItemsController:MediaItemsController;
+  playlistMediaItemsController: PlaylistMediaItemsController;
+  mediaItemsController: MediaItemsController;
   /**
      *
      */
@@ -23,18 +24,21 @@ export class ApplicationRoutes {
     this.playlistMediaItemsController = new PlaylistMediaItemsController();
     this.mediaItemsController = new MediaItemsController();
     this.router.route("/playlists").get(this.playlistController.list);
-    this.router.route("/playlists/:playlistId").get(this.playlistController.get);
+    this.router.route("/playlists/:playlistId").get(
+      this.playlistController.get,
+    );
     this.router.route("/playlists").post(this.playlistController.create);
 
-    this.router.route('/playlists/:playlistId/items').get(this.playlistMediaItemsController.list);
-    this.router.route('/playlists/:playlistId/items').post(this.playlistMediaItemsController.addMediaItemToPlaylist);
-    
-    
-    this.router.route('/items').get(this.mediaItemsController.list);
-    this.router.route('/items').post(this.mediaItemsController.createMediaItem);
-    this.router.route('/items/:mediaItemId').get(this.mediaItemsController.get);
+    this.router.route("/playlists/:playlistId/items").get(
+      this.playlistMediaItemsController.list,
+    );
+    this.router.route("/playlists/:playlistId/items").post(
+      this.playlistMediaItemsController.addMediaItemToPlaylist,
+    );
 
-    
+    this.router.route("/items").get(this.mediaItemsController.list);
+    this.router.route("/items").post(this.mediaItemsController.createMediaItem);
+    this.router.route("/items/:mediaItemId").get(this.mediaItemsController.get);
   }
 
   public getRoutes(): IRouter {
