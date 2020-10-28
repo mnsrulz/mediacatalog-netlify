@@ -17,4 +17,12 @@ export class PlaylistService {
     const result = playlist as Playlist;
     return result;
   }
+
+  public async addPlaylist(item: Playlist): Promise<String> {
+    const itemToAdd = {
+      title: item.title      
+    };
+    const createdDocument = await PlaylistDataService.create(itemToAdd);
+    return createdDocument._id;
+  }
 }

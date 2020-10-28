@@ -19,7 +19,7 @@ export class PlaylistController {
   }
 
   public async create(req: Request, res: Response) {
-    const output = { test: "create test123" };
-    res.json(output);
+    const id = await _playlistService.addPlaylist(req.body);
+    res.status(201).send({ id });
   }
 }
