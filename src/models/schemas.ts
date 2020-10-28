@@ -3,7 +3,10 @@ import * as mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 export const PlaylistSchema = new Schema({
-  ts: Date,
+  ts: {
+    type: Date,
+    default: Date.now(),
+  },
   title: String,
 }, { collection: "playlist" });
 

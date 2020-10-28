@@ -5,22 +5,37 @@ import { Playlist } from "../models/playlist";
 
 const PlaylistDataService = mongoose.model("PlaylistSchema", PlaylistSchema);
 
+const playlistTransformer = (doc: any, ret: any) => {
+  ret.id = ret._id;
+  delete ret["_id"];
+  delete ret["__v"];
+  return ret;
+};
+
+
 export class PlaylistService {
   public async getAll(): Promise<Playlist[]> {
     var playlists: any[] = await PlaylistDataService.find({});
-    const result = playlists.map((x) => x as Playlist);
-    return result;
+    return playlists && playlists.map((x) =>
+      x.toObject({
+        transform: playlistTransformer,
+      })
+    );
   }
 
-  public async getById(id:String): Promise<Playlist> {
+  public async getById(id:String): Promise<Playlist | null> {
     var playlist: any = await PlaylistDataService.findById(id);
-    const result = playlist as Playlist;
-    return result;
+    if (playlist) {
+      return playlist.toObject({
+        transform: playlistTransformer,
+      });
+    }
+    return null;
   }
 
   public async addPlaylist(item: Playlist): Promise<String> {
     const itemToAdd = {
-      title: item.title      
+      title: item.title
     };
     const createdDocument = await PlaylistDataService.create(itemToAdd);
     return createdDocument._id;
