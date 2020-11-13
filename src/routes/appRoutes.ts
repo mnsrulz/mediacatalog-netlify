@@ -23,8 +23,8 @@ export class ApplicationRoutes {
     this.router.route("/playlists").post(asyncHandler(this.playlistController.create));
 
     this.router.route("/playlists/:playlistId/items").get(asyncHandler(this.playlistMediaItemsController.list));
-    this.router.route("/playlists/:playlistId/items").post(asyncHandler(this.playlistMediaItemsController.addMediaItemToPlaylist));
-    this.router.route("/playlists/:playlistId/items").delete(asyncHandler(this.playlistMediaItemsController.deleteMediaItemToPlaylist));
+    this.router.route(["/playlists/:playlistId/items/:mediaItemId", "/items/:mediaItemId/playlists/:playlistId"]).put(asyncHandler(this.playlistMediaItemsController.addMediaItemToPlaylist));
+    this.router.route(["/playlists/:playlistId/items/:mediaItemId", "/items/:mediaItemId/playlists/:playlistId"]).delete(asyncHandler(this.playlistMediaItemsController.removeMediaItemFromPlaylist));
 
     this.router.route("/items").get(asyncHandler(this.mediaItemsController.list));
     this.router.route("/items").post(asyncHandler(this.mediaItemsController.createMediaItem));
@@ -32,9 +32,7 @@ export class ApplicationRoutes {
     this.router.route("/items/:mediaItemId").delete(asyncHandler(this.mediaItemsController.deleteMediaItem));
 
     this.router.route("/items/:mediaItemId/externalIds").post(asyncHandler(this.mediaItemsController.attachExternalIdToMediaItem));
-    this.router.route("/items/:mediaItemId/externalIds").delete(asyncHandler(this.mediaItemsController.detachExternalIdFromMediaItem));
-    this.router.route("/items/:mediaItemId/playlists").post(asyncHandler(this.playlistMediaItemsController.addMediaItemToPlaylist));
-    this.router.route("/items/:mediaItemId/playlists").delete(asyncHandler(this.playlistMediaItemsController.removeMediaItemFromPlaylist));
+    this.router.route("/items/:mediaItemId/externalIds").delete(asyncHandler(this.mediaItemsController.detachExternalIdFromMediaItem));    
   }
 
 

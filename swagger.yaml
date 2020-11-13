@@ -13,10 +13,7 @@ host: "mediacatalog.netlify.app"
 basePath: "/.netlify/functions/server"
 tags:
 - name: "playlist"
-  description: "Manages playlist"
-  externalDocs:
-    description: "Find out more"
-    url: "http://swagger.io"
+  description: "Manages playlist"  
 - name: "mediaitems"
   description: "Access to Media Items"
 schemes:
@@ -121,7 +118,8 @@ paths:
           description: "Invalid ID supplied"
         "404":
           description: "Playlist not found"
-    post:
+  /playlists/{playlistId}/items/{mediaItemId}:
+    put:
       tags:
       - "playlist"
       summary: "Add item in the playlist"
@@ -134,11 +132,11 @@ paths:
         description: "ID of pet that needs to be fetched"
         required: true
         type: "string"
-      - in: "body"
-        name: "body"        
+      - name: "mediaItemId"
+        in: "path"
+        description: "ID of pet that needs to be fetched"
         required: true
-        schema:
-          $ref: "#/definitions/AssignMediaToPlaylistRequest"      
+        type: "string"
       responses:
         "200":
           description: "successful operation"
@@ -157,6 +155,11 @@ paths:
       - "application/json"
       parameters:
       - name: "playlistId"
+        in: "path"
+        description: "ID of pet that needs to be fetched"
+        required: true
+        type: "string"
+      - name: "mediaItemId"
         in: "path"
         description: "ID of pet that needs to be fetched"
         required: true
@@ -203,7 +206,7 @@ paths:
           $ref: "#/definitions/CreateMediaItemCommand"
       responses:
         "405":
-          description: "Invalid input"      
+          description: "Invalid input"
   /items/{mediaItemId}:
     get:
       tags:
@@ -296,8 +299,8 @@ paths:
           description: "Invalid ID supplied"
         "404":
           description: "Media Item Id not found"
-  /items/{mediaItemId}/playlists:
-    post:
+  /items/{mediaItemId}/playlists/{playlistId}:
+    put:
       tags:
       - "mediaitems"
       summary: "Assign the Playlist to the media item"
@@ -334,10 +337,11 @@ paths:
         description: "ID of media item that needs to be removed from the playlist"
         required: true
         type: "string"
-      - name: "type"
-        in: "body"
-        schema:
-          $ref: "#/definitions/AssignPlaylistToMediaRequest"        
+      - name: "playlistId"
+        in: "path"
+        description: "ID of media item that needs to be removed from the playlist"
+        required: true
+        type: "string"
       responses:
         "200":
           description: "successful operation"          

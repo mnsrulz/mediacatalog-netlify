@@ -9,31 +9,18 @@ export class PlaylistMediaItemsController {
     res.json(items);
   }
 
-  public async addMediaItemToPlaylist(req: Request, res: Response) {
-    const mediaId = req.body.mediaId;
+  public async addMediaItemToPlaylist(req: Request, res: Response) {    
     await _playlistMediaItemService.addMediaItemToPlaylist(
-      mediaId,
+      req.params.mediaItemId,
       req.params.playlistId,
     );
     res.sendStatus(200);
   }
-  public async removeMediaItemFromPlaylist(req: Request, res: Response) {
-    const mediaId = req.body.mediaId;
+  public async removeMediaItemFromPlaylist(req: Request, res: Response) {    
     await _playlistMediaItemService.removeMediaItemFromPlaylist(
-      mediaId,
+      req.params.mediaItemId,
       req.params.playlistId,
     );
     res.sendStatus(204);
-  }
-
-  public async deleteMediaItemToPlaylist(req: Request, res: Response) {
-    const mediaId = req.body.mediaId;
-    console.log(req.body);
-    await _playlistMediaItemService.removeMediaItemFromPlaylist(
-      mediaId,
-      req.params.playlistId,
-    );
-    res.sendStatus(200);
-  }
-  
+  }  
 }
