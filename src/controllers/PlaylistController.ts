@@ -7,7 +7,6 @@ export class PlaylistController {
     //this._playlistService = new PlaylistService();
   }
   public async list(req: Request, res: Response) {
-    console.log("calling list...");
     const playlists = await _playlistService.getAll();
     res.json(playlists);
   }

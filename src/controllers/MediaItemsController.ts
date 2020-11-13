@@ -17,4 +17,21 @@ export class MediaItemsController {
     const id = await _playlistMediaItemService.addMediaItem(req.body);
     res.status(201).send({ id });
   }
+
+  public async deleteMediaItem(req: Request, res: Response) {
+    await _playlistMediaItemService.deleteMediaItem(req.params.mediaItemId);
+    res.status(204).send();
+  }
+
+  public async attachExternalIdToMediaItem(req: Request, res: Response) {
+    await _playlistMediaItemService.attachExternalIdToMediaItem(req.params.mediaItemId, req.body);
+    res.status(200).send();
+  }
+  public async detachExternalIdFromMediaItem(req: Request, res: Response) {
+    await _playlistMediaItemService.detachExternalIdFromMediaItem(req.params.mediaItemId, req.body);
+    res.status(204).send();
+  }
+
+
+
 }

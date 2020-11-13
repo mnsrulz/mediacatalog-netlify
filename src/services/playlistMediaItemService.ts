@@ -1,7 +1,10 @@
 import * as mongoose from "mongoose";
-
+import {
+  NotFoundException,
+  ValidationException,
+} from "../exceptions/exceptions";
 import { MediaItemSchema } from "../models/schemas";
-import { PlaylistItem } from "../models/playlist";
+import { ExternalId, PlaylistItem } from "../models/playlist";
 
 const MediaItemDataService = mongoose.model("MediaItemSchema", MediaItemSchema);
 const playlistItemTransformer = (doc: any, ret: any) => {
@@ -10,6 +13,8 @@ const playlistItemTransformer = (doc: any, ret: any) => {
   delete ret["__v"];
   return ret;
 };
+
+const knownExternalIdProviders = ["imdb", "tvdb", "tmdb"];
 export class PlaylistMediaItemService {
   public async get(mediaItemId: any) {
     var playlist = await MediaItemDataService.findById(mediaItemId);
@@ -37,9 +42,17 @@ export class PlaylistMediaItemService {
       year: item.year,
       itemType: item.itemType,
     };
-    console.log("adding this item... ", itemToAdd);
     const createdDocument = await MediaItemDataService.create(itemToAdd);
     return createdDocument._id;
+  }
+
+  public async deleteMediaItem(mediaId: string): Promise<void> {
+    const doc: any = await MediaItemDataService.findById(mediaId);
+    if (doc) {
+      await MediaItemDataService.deleteOne({ _id: mediaId });
+    } else {
+      throw new NotFoundException(mediaId);
+    }
   }
 
   public async addMediaItemToPlaylist(
@@ -59,7 +72,7 @@ export class PlaylistMediaItemService {
         });
       }
     } else {
-      console.log("document not found...");
+      throw new NotFoundException(mediaId);
     }
   }
 
@@ -79,7 +92,75 @@ export class PlaylistMediaItemService {
         console.log("Item does not exists in the playlist");
       }
     } else {
-      console.log("document not found with mediaId:", mediaId);
+      throw new NotFoundException(mediaId);
+    }
+  }
+
+  public async attachExternalIdToMediaItem(
+    mediaId: string,
+    externalId: ExternalId,
+  ): Promise<void> {
+    const isKnownExternalProvider = knownExternalIdProviders.includes(
+      externalId.type,
+    );
+    if (!isKnownExternalProvider) {
+      throw new ValidationException("Invalid External Provider");
+    }
+    const doc: any = await MediaItemDataService.findById(mediaId);
+
+    if (doc) {
+      const externalIds: ExternalId[] = doc.externalIds;
+      if (
+        externalIds && externalIds.some((x) =>
+          x.type === externalId.type && x.id === externalId.id
+        )
+      ) {
+        console.log(
+          `External Id ${externalId.id} already associated with the media item.`,
+        );
+      } else {
+        await MediaItemDataService.updateOne({ _id: doc._id }, {
+          $push: {
+            externalIds: externalId,
+          },
+        });
+      }
+    } else {
+      throw new NotFoundException(mediaId);
+    }
+  }
+
+  public async detachExternalIdFromMediaItem(
+    mediaId: string,
+    externalId: ExternalId,
+  ): Promise<void> {
+    const isKnownExternalProvider = knownExternalIdProviders.includes(
+      externalId.type,
+    );
+    if (!isKnownExternalProvider) {
+      throw new ValidationException("Invalid External Provider");
+    }
+    const doc: any = await MediaItemDataService.findById(mediaId);
+
+    if (doc) {
+      const externalIds: ExternalId[] = doc.externalIds;
+      if (
+        externalIds && externalIds.some((x) =>
+          x.type === externalId.type && x.id === externalId.id
+        )
+      ) {
+        await MediaItemDataService.updateOne({ _id: doc._id }, {
+          $pull: {
+            externalIds: externalId,
+          },
+        });
+      } else {
+        throw new ValidationException(
+          "Requested external id not found in this media item id.",
+        );
+      }
+    } else {
+      throw new NotFoundException(mediaId);
     }
   }
 }
