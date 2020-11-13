@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 import basicAuth from "express-basic-auth";
 import cors from "cors";
 
-const mongoUrl: string = process.env.MONGODB_URI || 'mongodb+srv://testuser:BCO6HUx3UU5W58Gk@cluster0.9m1ac.mongodb.net/mediacatalog?retryWrites=true&w=majority';
+const mongoUrl: string = process.env.MONGODB_URI || '';
 
 class App {
   // public app: express.Application = express();
