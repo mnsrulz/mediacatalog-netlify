@@ -34,6 +34,7 @@
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
     "express-basic-auth": "^1.2.0",
+    "got": "^11.8.1",
     "netlify-lambda": "^2.0.1",
     "nodemon": "^2.0.4",
     "serverless-http": "^2.6.0",

@@ -5,6 +5,9 @@ import {
 } from "../exceptions/exceptions";
 import { MediaItemSchema } from "../models/schemas";
 import { ExternalId, PlaylistItem } from "../models/playlist";
+import { TmdbWrapperService } from "./tmbdWrapper";
+
+const _tmdbWrapperService = new TmdbWrapperService();
 
 const MediaItemDataService = mongoose.model("MediaItemSchema", MediaItemSchema);
 const playlistItemTransformer = (doc: any, ret: any) => {
@@ -111,7 +114,8 @@ export class PlaylistMediaItemService {
     if (doc) {
       const externalIds: ExternalId[] = doc.externalIds;
       if (
-        externalIds && externalIds.some((x) =>
+        externalIds &&
+        externalIds.some((x) =>
           x.type === externalId.type && x.id === externalId.id
         )
       ) {
@@ -145,7 +149,8 @@ export class PlaylistMediaItemService {
     if (doc) {
       const externalIds: ExternalId[] = doc.externalIds;
       if (
-        externalIds && externalIds.some((x) =>
+        externalIds &&
+        externalIds.some((x) =>
           x.type === externalId.type && x.id === externalId.id
         )
       ) {
@@ -162,5 +167,48 @@ export class PlaylistMediaItemService {
     } else {
       throw new NotFoundException(mediaId);
     }
+  }
+
+  public async getByExternalId(externalId: any, type: any) {
+    console.log(externalId, type);
+    const isKnownExternalProvider = knownExternalIdProviders.includes(type);
+    if (!isKnownExternalProvider) {
+      throw new ValidationException("Invalid External Provider");
+    }
+
+    var mediaItem = await MediaItemDataService.findOne(
+      { externalIds: { id: externalId, type: type } },
+    );
+    if (mediaItem) {
+      return mediaItem.toObject({
+        transform: playlistItemTransformer,
+      });
+    }
+    return null;
+  }
+
+  public async createMediaByExternalId(externalId: any, type: any) {
+    console.log(externalId, type);
+    const isKnownExternalProvider = knownExternalIdProviders.includes(type);
+    if (!isKnownExternalProvider) {
+      throw new ValidationException("Invalid External Provider");
+    }
+
+    var mediaItem = await MediaItemDataService.findOne(
+      { externalIds: { id: externalId, type: type } },
+    );
+    if (mediaItem) {
+      throw new ValidationException("External Id already present.");
+    }
+
+    const tmdbResponse = _tmdbWrapperService.getByImdbId(externalId);
+    return tmdbResponse;
+    // const itemToAdd = {
+    //   title: item.title,
+    //   year: item.year,
+    //   itemType: item.itemType,
+    // };
+    // const createdDocument = await MediaItemDataService.create(itemToAdd);
+    // return createdDocument._id;
   }
 }

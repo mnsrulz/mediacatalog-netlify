@@ -32,7 +32,11 @@ export class ApplicationRoutes {
     this.router.route("/items/:mediaItemId").delete(asyncHandler(this.mediaItemsController.deleteMediaItem));
 
     this.router.route("/items/:mediaItemId/externalIds").post(asyncHandler(this.mediaItemsController.attachExternalIdToMediaItem));
-    this.router.route("/items/:mediaItemId/externalIds").delete(asyncHandler(this.mediaItemsController.detachExternalIdFromMediaItem));    
+    this.router.route("/items/:mediaItemId/externalIds").delete(asyncHandler(this.mediaItemsController.detachExternalIdFromMediaItem));
+
+    this.router.route("/items/byExternalId/:externalId").get(asyncHandler(this.mediaItemsController.getByExternalId));
+    this.router.route("/items/byExternalId/:externalId").post(asyncHandler(this.mediaItemsController.createMediaItemByExternalId));
+    
   }
 
 

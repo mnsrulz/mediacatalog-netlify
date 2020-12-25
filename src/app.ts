@@ -5,8 +5,9 @@ import { ApplicationRoutes } from "./routes/appRoutes";
 import mongoose from "mongoose";
 import basicAuth from "express-basic-auth";
 import cors from "cors";
+import configs from "./configs/config";
 
-const mongoUrl: string = process.env.MONGODB_URI || '';
+const mongoUrl: string = configs.mongoUri;
 
 class App {
   // public app: express.Application = express();
