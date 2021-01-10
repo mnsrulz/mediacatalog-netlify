@@ -201,8 +201,19 @@ export class PlaylistMediaItemService {
       throw new ValidationException("External Id already present.");
     }
 
-    const tmdbResponse = _tmdbWrapperService.getByImdbId(externalId);
-    return tmdbResponse;
+    const tmdbResponse:any = await _tmdbWrapperService.getByImdbId(externalId);
+
+    const result = tmdbResponse.movie_results || tmdbResponse.tv_results;
+
+    const itemToAdd = {
+      title: result.name,
+      year: result.year,
+      itemType: result.itemType,
+    };
+    const createdDocument = await MediaItemDataService.create(itemToAdd);
+    return createdDocument._id;
+
+    // return tmdbResponse;
     // const itemToAdd = {
     //   title: item.title,
     //   year: item.year,

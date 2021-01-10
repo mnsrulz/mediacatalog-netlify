@@ -40,9 +40,7 @@ export class MediaItemsController {
 
 
   public async createMediaItemByExternalId(req: Request, res: Response) {
-    const item = await _playlistMediaItemService.createMediaByExternalId(req.params.externalId, req.query['type']);
-    res.json(item);
+    const id = await _playlistMediaItemService.createMediaByExternalId(req.params.externalId, req.query['type']);
+    res.status(201).send({ id });
   }
-
-
 }
