@@ -438,6 +438,39 @@ paths:
                 description: "Id of the created media item"
         "405":
           description: "Invalid input"
+  /remoteUrlUploadRequest:
+    # get:
+    #   tags:
+    #   - "playlist"
+    #   produces:
+    #     - "application/json"      
+    #   responses:
+    #     "200":          
+    #       description: "successful operation"
+    #       schema:
+    #         type: "array"
+    #         items:
+    #           $ref: "#/definitions/Playlist"
+    post:
+      tags:
+      - "remoteurlupload"
+      summary: "Create a new remote url upload request"
+      description: ""
+      operationId: "addRequest"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "remote url request object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/CreateRemoteUrlRequestCommand"
+      responses:
+        "405":
+          description: "Invalid input"
 securityDefinitions:  
   basicAuth:
     type: "basic"    
@@ -517,6 +550,17 @@ definitions:
     properties:
       playlistId:
         type: "string"
+  CreateRemoteUrlRequestCommand:
+    type: "object"
+    properties:
+      fileUrl:
+        required: true
+        type: "string"
+      files:
+        type: "array"
+        required: true
+        items:
+          type: "string"
   Order:
     type: "object"
     properties:

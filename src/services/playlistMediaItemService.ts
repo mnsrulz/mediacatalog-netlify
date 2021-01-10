@@ -3,13 +3,15 @@ import {
   NotFoundException,
   ValidationException,
 } from "../exceptions/exceptions";
-import { MediaItemSchema } from "../models/schemas";
+import { MediaItemSchema, RemoteUrlUploadRequestSchema } from "../models/schemas";
 import { ExternalId, PlaylistItem } from "../models/playlist";
 import { TmdbWrapperService } from "./tmbdWrapper";
 
 const _tmdbWrapperService = new TmdbWrapperService();
 
-const MediaItemDataService = mongoose.model("MediaItemSchema", MediaItemSchema);
+export const MediaItemDataService = mongoose.model("MediaItemSchema", MediaItemSchema);
+
+
 const playlistItemTransformer = (doc: any, ret: any) => {
   ret.id = ret._id;
   delete ret["_id"];

@@ -19,3 +19,14 @@ export const MediaItemSchema = new Schema({
     type: String,
   }],
 }, { collection: "mediaItem" });
+
+export const RemoteUrlUploadRequestSchema = new Schema({
+  requestId: String,
+  fileName: String,
+  fileUrl: String,
+  ts: {
+    type: Date,
+    default: Date.now(),
+  },
+  sequence: Number
+}, { collection: "remoteUrlUploadRequest" });
