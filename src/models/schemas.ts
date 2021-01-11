@@ -28,5 +28,7 @@ export const RemoteUrlUploadRequestSchema = new Schema({
     type: Date,
     default: Date.now(),
   },
-  sequence: Number
+  sequence: Number,
+  status: String,
+  message: String
 }, { collection: "remoteUrlUploadRequest" });

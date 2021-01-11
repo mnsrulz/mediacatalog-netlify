@@ -12,4 +12,5 @@ export interface GetRemoteUrlUploadRequest {
   sequence: number;
   id: string
   status: string;
+  message: string;
 }
