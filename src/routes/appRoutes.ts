@@ -4,6 +4,7 @@ import express from "express";
 import { PlaylistController } from "../controllers/PlaylistController";
 import { PlaylistMediaItemsController } from "../controllers/PlaylistMediaItemsController";
 import { MediaItemsController } from "../controllers/MediaItemsController";
+import { RemoteUrlUploadRequestController } from "../controllers/RemoteUrlUploadRequestController";
 
 import asyncHandler from 'express-async-handler';
 
@@ -12,11 +13,13 @@ export class ApplicationRoutes {
   playlistController: PlaylistController;
   playlistMediaItemsController: PlaylistMediaItemsController;
   mediaItemsController: MediaItemsController;
+  remoteUrlUploadRequestController: RemoteUrlUploadRequestController;
   constructor() {
     this.router = express.Router();
     this.playlistController = new PlaylistController();
     this.playlistMediaItemsController = new PlaylistMediaItemsController();
     this.mediaItemsController = new MediaItemsController();
+    this.remoteUrlUploadRequestController = new RemoteUrlUploadRequestController();
 
     this.router.route("/playlists").get(asyncHandler(this.playlistController.list));
     this.router.route("/playlists/:playlistId").get(asyncHandler(this.playlistController.get));
@@ -36,7 +39,9 @@ export class ApplicationRoutes {
 
     this.router.route("/items/byExternalId/:externalId").get(asyncHandler(this.mediaItemsController.getByExternalId));
     this.router.route("/items/byExternalId/:externalId").post(asyncHandler(this.mediaItemsController.createMediaItemByExternalId));
-    
+
+    this.router.route("/remoteUrlUploadRequest").get(asyncHandler(this.remoteUrlUploadRequestController.list));
+    this.router.route("/remoteUrlUploadRequest").post(asyncHandler(this.remoteUrlUploadRequestController.create));
   }
 
 
