@@ -37,7 +37,7 @@ export class PlaylistMediaItemService {
     return playlists && playlists.map((x) =>
       x.toObject({
         transform: playlistItemTransformer,
-      })
+      }) as PlaylistItem
     );
   }
 

@@ -3,25 +3,17 @@ import * as bodyParser from "body-parser";
 
 import { ApplicationRoutes } from "./routes/appRoutes";
 import mongoose from "mongoose";
-import basicAuth from "express-basic-auth";
 import cors from "cors";
 import configs from "./configs/config";
+
+import passport from "passport";
+
+var GoogleTokenStrategy = require('passport-google-id-token');
+import { BasicStrategy } from 'passport-http';
 
 const mongoUrl: string = configs.mongoUri;
 
 class App {
-  // public app: express.Application = express();
-  // public applicationRoutes: ApplicationRoutes = new ApplicationRoutes();  
-
-
-  // constructor(baseUrl: string) {
-  //   this.config();
-  //   this.authSetup();
-
-  //   this.app.use(baseUrl || "/", this.applicationRoutes.getRoutes());
-
-  //   //this.mongoSetup();
-  // }
 
   public static createApp(baseUrl: string): Express.Application {
     const app = express();
@@ -33,16 +25,32 @@ class App {
 
     //auth
     const userName = process.env.adminUserName || "admin";
-    const password = process.env.adminPassword || "admin";
-    const realm = process.env.realm || "media-catalog-api";
+    const secretPassword = process.env.adminPassword || "admin";
+    const googleClientId = process.env.googleClientId || '345350504609-1moo0gfi27h0jj2qaim5ed1iohgprs99.apps.googleusercontent.com';
+    passport.use(new BasicStrategy(
+      function (username, password, done) {
+        if (username === userName && password === secretPassword) {
+          return done(null, {
+            username
+          });
+        } else {
+          return done(null, false);
+        }
+      }
+    ));
 
-    let users: { [username: string]: string } = {};
-    users[userName] = password;
-    app.use(basicAuth({
-      users: users,
-      challenge: true,
-      realm: realm,
-    }));
+    passport.use(new GoogleTokenStrategy({
+      clientID: googleClientId
+    },
+      function (parsedToken: any, googleId: any, done: any) {        
+        return done(null, {
+          name: parsedToken.name,
+          googleId
+        });
+      }
+    ));
+
+    app.use(passport.authenticate(['basic', 'google-id-token'], { session: false }));
 
     //db init
     mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -51,7 +59,7 @@ class App {
     app.use(baseUrl || "/", applicationRoutes.getRoutes());
 
     //global error handler
-    app.use((err: Error, req: any, res: any, next: any) => {      
+    app.use((err: Error, req: any, res: any, next: any) => {
       res.status(500).json({
         status: 'error',
         message: err.message,

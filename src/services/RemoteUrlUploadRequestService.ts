@@ -21,7 +21,7 @@ export class RemoteUrlUploadRequestService {
         return requests && requests.map((x) =>
             x.toObject({
                 transform: _transformer,
-            })
+            }) as GetRemoteUrlUploadRequest
         );
     }
 

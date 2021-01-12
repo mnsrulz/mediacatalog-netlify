@@ -21,6 +21,7 @@ tags:
   description: "Access to Media Items"
 security:
   - basicAuth: []
+  - bearerAuth: []
 paths:
   /playlists:
     get:
@@ -438,6 +439,10 @@ components:
     basicAuth:     # <-- arbitrary name for the security scheme
       type: http
       scheme: basic
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
   schemas:
     Playlist:
       type: "object"
