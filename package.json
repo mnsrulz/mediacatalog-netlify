@@ -42,7 +42,7 @@
     "mongoose": "^5.11.11",
     "netlify-lambda": "^2.0.2",
     "nodemon": "^2.0.7",
-    "serverless-http": "^2.6.0",
+    "serverless-http": "^2.6.1",
     "ts-node": "^9.1.1",
     "tsc-watch": "^4.2.9",
     "typescript": "^4.1.3",
