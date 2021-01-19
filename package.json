@@ -40,7 +40,7 @@
     "express-async-handler": "^1.1.4",
     "got": "^11.8.1",
     "mongoose": "^5.11.11",
-    "netlify-lambda": "^2.0.2",
+    "netlify-lambda": "^2.0.3",
     "nodemon": "^2.0.7",
     "serverless-http": "^2.6.0",
     "ts-node": "^9.1.1",
