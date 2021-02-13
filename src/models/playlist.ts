@@ -8,8 +8,8 @@ export interface PlaylistItem {
   itemType: String;
   title: String;
   year: String;
-  externalIds: [{ type: ExternalId }];
-  playlistIds: [{ type: String }];
+  externalIds: ExternalId[];
+  playlistIds: string[];
 }
 
 export interface ExternalId {

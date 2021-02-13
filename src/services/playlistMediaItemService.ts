@@ -171,7 +171,7 @@ export class PlaylistMediaItemService {
     }
   }
 
-  public async getByExternalId(externalId: any, type: any) {
+  public async getByExternalId(externalId: string, type: string) {
     console.log(externalId, type);
     const isKnownExternalProvider = knownExternalIdProviders.includes(type);
     if (!isKnownExternalProvider) {
@@ -189,40 +189,45 @@ export class PlaylistMediaItemService {
     return null;
   }
 
-  public async createMediaByExternalId(externalId: any, type: any) {
-    console.log(externalId, type);
-    const isKnownExternalProvider = knownExternalIdProviders.includes(type);
+  public async createMediaByExternalId(extId: ExternalId) {
+    const isKnownExternalProvider = knownExternalIdProviders.includes(extId.type);
     if (!isKnownExternalProvider) {
       throw new ValidationException("Invalid External Provider");
+    } else if (extId.type != 'imdb') {
+      throw new ValidationException("Only IMDB External Provider is supported now.");
     }
 
     var mediaItem = await MediaItemDataService.findOne(
-      { externalIds: { id: externalId, type: type } },
+      { externalIds: extId },
     );
     if (mediaItem) {
       throw new ValidationException("External Id already present.");
     }
 
-    const tmdbResponse: any = await _tmdbWrapperService.getByImdbId(externalId);
-
-    const result = tmdbResponse.movie_results || tmdbResponse.tv_results;
-
-    const itemToAdd = {
-      title: result.name,
-      year: result.year,
-      itemType: result.itemType,
-    };
+    const tmdbResponse: any = await _tmdbWrapperService.getByImdbId(extId.id);
+    let itemToAdd = {
+      externalIds: [extId]
+    } as PlaylistItem;
+    let result;
+    if (tmdbResponse.movie_results?.length) {
+      result = tmdbResponse.movie_results[0];
+      itemToAdd.title = result.title;
+      itemToAdd.year = result.release_date.substr(0, 4);
+      itemToAdd.itemType = 'Movie';
+    } else if (tmdbResponse.tv_results?.length) {
+      result = tmdbResponse.tv_results[0];
+      itemToAdd.title = result.name;
+      itemToAdd.year = result.first_air_date.substr(0, 4);
+      itemToAdd.itemType = 'TV';
+    } else {
+      throw new ValidationException('Unable to fetch external id');
+    }
+    itemToAdd.externalIds.push({
+      id: result.id,
+      type: 'tmdb'
+    });
     const createdDocument = await MediaItemDataService.create(itemToAdd);
     return createdDocument._id;
-
-    // return tmdbResponse;
-    // const itemToAdd = {
-    //   title: item.title,
-    //   year: item.year,
-    //   itemType: item.itemType,
-    // };
-    // const createdDocument = await MediaItemDataService.create(itemToAdd);
-    // return createdDocument._id;
   }
 
   public async markItemAsFavorite(

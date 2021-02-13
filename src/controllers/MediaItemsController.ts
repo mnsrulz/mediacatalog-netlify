@@ -7,7 +7,7 @@ export class MediaItemsController {
     const items = await _playlistMediaItemService.getItems();
     res.json(items);
   }
-  
+
   public async get(req: Request, res: Response) {
     const item = await _playlistMediaItemService.get(req.params.mediaItemId);
     res.json(item);
@@ -34,13 +34,16 @@ export class MediaItemsController {
 
 
   public async getByExternalId(req: Request, res: Response) {
-    const item = await _playlistMediaItemService.getByExternalId(req.params.externalId, req.query['type']);
+    const item = await _playlistMediaItemService.getByExternalId(req.params.externalId, req.query['type'] as string);
     res.json(item);
   }
 
 
   public async createMediaItemByExternalId(req: Request, res: Response) {
-    const id = await _playlistMediaItemService.createMediaByExternalId(req.params.externalId, req.query['type']);
+    const id = await _playlistMediaItemService.createMediaByExternalId({
+      id: req.params.externalId,
+      type: req.query['type'] as string
+    });
     res.status(201).send({ id });
   }
 

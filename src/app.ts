@@ -10,6 +10,7 @@ import passport from "passport";
 
 var GoogleTokenStrategy = require('passport-google-id-token');
 import { BasicStrategy } from 'passport-http';
+import { ValidationException } from "./exceptions/exceptions";
 
 const mongoUrl: string = configs.mongoUri;
 
@@ -42,7 +43,7 @@ class App {
     passport.use(new GoogleTokenStrategy({
       clientID: googleClientId
     },
-      function (parsedToken: any, googleId: any, done: any) {        
+      function (parsedToken: any, googleId: any, done: any) {
         return done(null, {
           name: parsedToken.name,
           googleId
@@ -60,10 +61,17 @@ class App {
 
     //global error handler
     app.use((err: Error, req: any, res: any, next: any) => {
-      res.status(500).json({
-        status: 'error',
-        message: err.message,
-      });
+      if (err instanceof ValidationException) {
+        res.status(400).json({
+          status: 'validation error',
+          message: err.message
+        });
+      } else {
+        res.status(500).json({
+          status: 'server error',
+          message: err.message
+        });
+      }
     });
     return app;
   }
