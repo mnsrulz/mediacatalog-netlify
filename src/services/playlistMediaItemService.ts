@@ -203,7 +203,7 @@ export class PlaylistMediaItemService {
       throw new ValidationException("External Id already present.");
     }
 
-    const tmdbResponse:any = await _tmdbWrapperService.getByImdbId(externalId);
+    const tmdbResponse: any = await _tmdbWrapperService.getByImdbId(externalId);
 
     const result = tmdbResponse.movie_results || tmdbResponse.tv_results;
 
@@ -223,5 +223,32 @@ export class PlaylistMediaItemService {
     // };
     // const createdDocument = await MediaItemDataService.create(itemToAdd);
     // return createdDocument._id;
+  }
+
+  public async markItemAsFavorite(
+    mediaId: string
+  ): Promise<void> {
+    const doc: any = await MediaItemDataService.findById(mediaId);
+
+    if (doc) {
+      await MediaItemDataService.updateOne({ _id: doc._id }, {
+        favorite: true
+      });
+    } else {
+      throw new NotFoundException(mediaId);
+    }
+  }
+
+  public async unafavoriteItem(
+    mediaId: string
+  ): Promise<void> {
+    const doc: any = await MediaItemDataService.findById(mediaId);
+    if (doc) {
+      await MediaItemDataService.updateOne({ _id: doc._id }, {
+        favorite: false
+      });
+    } else {
+      throw new NotFoundException(mediaId);
+    }
   }
 }

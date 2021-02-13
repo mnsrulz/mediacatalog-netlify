@@ -230,6 +230,39 @@ paths:
           description: "successful operation"      
         "404":
           description: "Media Item Id not found"      
+  /items/{mediaItemId}/favorite:
+    put:
+      tags:
+        - "mediaitems"
+      summary: "Marks media item as favorite"
+      parameters:
+      - name: "mediaItemId"
+        in: "path"
+        description: "ID of media item"
+        required: true
+        schema:
+          type: "string"      
+      responses:
+        "204":
+          description: "successful operation"      
+        "404":
+          description: "Media Item Id not found"
+    delete:
+      tags:
+        - "mediaitems"
+      summary: "Removes media item from favorite list"
+      parameters:
+      - name: "mediaItemId"
+        in: "path"
+        description: "ID of media item"
+        required: true
+        schema:
+          type: "string"      
+      responses:
+        "204":
+          description: "successful operation"      
+        "404":
+          description: "Media Item Id not found"
   /items/{mediaItemId}/externalIds/{externalId}:
     put:
       tags:

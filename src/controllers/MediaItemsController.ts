@@ -43,4 +43,15 @@ export class MediaItemsController {
     const id = await _playlistMediaItemService.createMediaByExternalId(req.params.externalId, req.query['type']);
     res.status(201).send({ id });
   }
+
+  public async markItemAsFavorite(req: Request, res: Response) {
+    const id = await _playlistMediaItemService.markItemAsFavorite(req.params.mediaItemId);
+    res.status(204).send({ id });
+  }
+
+  public async unFavoriteItem(req: Request, res: Response) {
+    const id = await _playlistMediaItemService.unafavoriteItem(req.params.mediaItemId);
+    res.status(204).send({ id });
+  }
+
 }

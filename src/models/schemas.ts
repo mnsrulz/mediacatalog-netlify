@@ -18,6 +18,10 @@ export const MediaItemSchema = new Schema({
   playlistIds: [{
     type: String,
   }],
+  favorite: {
+    type: Boolean,
+    default: false
+  }
 }, { collection: "mediaItem" });
 
 export const RemoteUrlUploadRequestSchema = new Schema({
