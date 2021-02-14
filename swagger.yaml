@@ -15,10 +15,10 @@ servers:
   - url: https://mediacatalog.netlify.app/.netlify/functions/server
     description: production
 tags:
-- name: "playlist"
-  description: "Manages playlist"  
-- name: "mediaitems"
-  description: "Access to Media Items"
+  - name: "playlist"
+    description: "Manages playlist"
+  - name: "mediaitems"
+    description: "Access to Media Items"
 security:
   - basicAuth: []
   - bearerAuth: []
@@ -26,9 +26,9 @@ paths:
   /playlists:
     get:
       tags:
-      - "playlist"
+        - "playlist"
       responses:
-        "200":          
+        "200":
           description: "successful operation"
           content:
             application/json:
@@ -38,7 +38,7 @@ paths:
                   $ref: "#/components/schemas/Playlist"
     post:
       tags:
-      - "playlist"
+        - "playlist"
       summary: "Add a new playlist"
       requestBody:
         required: true
@@ -46,15 +46,15 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Playlist"
-      responses: 
-        '201':
+      responses:
+        "201":
           description: Created
         "400":
           description: "Invalid input"
   /playlists/{playlistId}:
     get:
       tags:
-      - "playlist"
+        - "playlist"
       summary: "Find playlist by ID"
       parameters:
         - in: "path"
@@ -78,11 +78,11 @@ paths:
         - "playlist"
       summary: "Delete Playlist by ID"
       parameters:
-      - name: "playlistId"
-        in: "path"
-        description: "ID of the Playlist that needs to be deleted"
-        required: true
-        schema:
+        - name: "playlistId"
+          in: "path"
+          description: "ID of the Playlist that needs to be deleted"
+          required: true
+          schema:
             type: string
       responses:
         "404":
@@ -93,11 +93,11 @@ paths:
         - "playlist"
       summary: "List items in the playlist"
       parameters:
-      - name: "playlistId"
-        in: "path"
-        description: "ID of pet that needs to be fetched"
-        required: true
-        schema:
+        - name: "playlistId"
+          in: "path"
+          description: "ID of pet that needs to be fetched"
+          required: true
+          schema:
             type: string
       responses:
         "200":
@@ -113,21 +113,21 @@ paths:
   /playlists/{playlistId}/items/{mediaItemId}:
     put:
       tags:
-      - "playlist"
+        - "playlist"
       summary: "Add item in the playlist"
       parameters:
-      - name: "playlistId"
-        in: "path"
-        description: "ID of pet that needs to be fetched"
-        required: true
-        schema:
-          type: "string"
-      - name: "mediaItemId"
-        in: "path"
-        description: "ID of pet that needs to be fetched"
-        required: true
-        schema:
-          type: "string"
+        - name: "playlistId"
+          in: "path"
+          description: "ID of pet that needs to be fetched"
+          required: true
+          schema:
+            type: "string"
+        - name: "mediaItemId"
+          in: "path"
+          description: "ID of pet that needs to be fetched"
+          required: true
+          schema:
+            type: "string"
       responses:
         "200":
           description: "successful operation"
@@ -141,21 +141,21 @@ paths:
           description: "Playlist not found"
     delete:
       tags:
-      - "playlist"
+        - "playlist"
       summary: "Removes item from the playlist"
       parameters:
-      - name: "playlistId"
-        in: "path"
-        description: "ID of pet that needs to be fetched"
-        required: true
-        schema:
-          type: "string"
-      - name: "mediaItemId"
-        in: "path"
-        description: "ID of pet that needs to be fetched"
-        required: true
-        schema:
-          type: "string"
+        - name: "playlistId"
+          in: "path"
+          description: "ID of pet that needs to be fetched"
+          required: true
+          schema:
+            type: "string"
+        - name: "mediaItemId"
+          in: "path"
+          description: "ID of pet that needs to be fetched"
+          required: true
+          schema:
+            type: "string"
       responses:
         "200":
           description: "successful operation"
@@ -170,9 +170,17 @@ paths:
   /items:
     get:
       tags:
-      - "mediaitems"
+        - "mediaitems"
+      parameters:
+        - name: "type"
+          in: "query"
+          schema:
+            type: "string"
+            enum:
+              - "movie"
+              - "tv"
       responses:
-        "200":          
+        "200":
           description: "successful operation"
           content:
             application/json:
@@ -191,22 +199,22 @@ paths:
             schema:
               $ref: "#/components/schemas/CreateMediaItemCommand"
       responses:
-        '201':
+        "201":
           description: Created
         "400":
           description: "Invalid input"
   /items/{mediaItemId}:
     get:
       tags:
-      - "mediaitems"
+        - "mediaitems"
       summary: "Retrieves a media item"
       parameters:
-      - name: "mediaItemId"
-        in: "path"
-        description: "ID of media item"
-        required: true
-        schema:
-          type: "string"      
+        - name: "mediaItemId"
+          in: "path"
+          description: "ID of media item"
+          required: true
+          schema:
+            type: "string"
       responses:
         "200":
           description: "successful operation"
@@ -219,32 +227,32 @@ paths:
         - "mediaitems"
       summary: "Deletes a media item"
       parameters:
-      - name: "mediaItemId"
-        in: "path"
-        description: "ID of media item"
-        required: true
-        schema:
-          type: "string"      
+        - name: "mediaItemId"
+          in: "path"
+          description: "ID of media item"
+          required: true
+          schema:
+            type: "string"
       responses:
         "204":
-          description: "successful operation"      
+          description: "successful operation"
         "404":
-          description: "Media Item Id not found"      
+          description: "Media Item Id not found"
   /items/{mediaItemId}/favorite:
     put:
       tags:
         - "mediaitems"
       summary: "Marks media item as favorite"
       parameters:
-      - name: "mediaItemId"
-        in: "path"
-        description: "ID of media item"
-        required: true
-        schema:
-          type: "string"      
+        - name: "mediaItemId"
+          in: "path"
+          description: "ID of media item"
+          required: true
+          schema:
+            type: "string"
       responses:
         "204":
-          description: "successful operation"      
+          description: "successful operation"
         "404":
           description: "Media Item Id not found"
     delete:
@@ -252,46 +260,46 @@ paths:
         - "mediaitems"
       summary: "Removes media item from favorite list"
       parameters:
-      - name: "mediaItemId"
-        in: "path"
-        description: "ID of media item"
-        required: true
-        schema:
-          type: "string"      
+        - name: "mediaItemId"
+          in: "path"
+          description: "ID of media item"
+          required: true
+          schema:
+            type: "string"
       responses:
         "204":
-          description: "successful operation"      
+          description: "successful operation"
         "404":
           description: "Media Item Id not found"
   /items/{mediaItemId}/externalIds/{externalId}:
     put:
       tags:
-      - "mediaitems"
+        - "mediaitems"
       summary: "Assign the external id to the media item"
       parameters:
-      - name: "mediaItemId"
-        in: "path"
-        description: "ID of media item"
-        required: true
-        schema:
-          type: "string"
-      - name: "externalId"
-        in: "path"
-        description: "External Id to attach"
-        required: true
-        schema:
-          type: "string"
-      - name: "type"
-        in: "query"        
-        schema:
-          type: "string"
-          enum:
-          - "imdb"
-          - "tvdb"
-          - "tmdb"
+        - name: "mediaItemId"
+          in: "path"
+          description: "ID of media item"
+          required: true
+          schema:
+            type: "string"
+        - name: "externalId"
+          in: "path"
+          description: "External Id to attach"
+          required: true
+          schema:
+            type: "string"
+        - name: "type"
+          in: "query"
+          schema:
+            type: "string"
+            enum:
+              - "imdb"
+              - "tvdb"
+              - "tmdb"
       responses:
         "200":
-          description: "successful operation"          
+          description: "successful operation"
         "400":
           description: "Invalid ID supplied"
         "404":
@@ -299,26 +307,26 @@ paths:
   /items/{mediaItemId}/externalIds:
     delete:
       tags:
-      - "mediaitems"
+        - "mediaitems"
       summary: "Removes the external id from the media item"
       parameters:
-      - name: "mediaItemId"
-        in: "path"
-        description: "ID of media item"
-        required: true
-        schema:
-          type: "string"
-      - name: "type"
-        in: "query"        
-        schema:
-          type: "string"
-          enum:
-          - "imdb"
-          - "tvdb"
-          - "tmdb"
+        - name: "mediaItemId"
+          in: "path"
+          description: "ID of media item"
+          required: true
+          schema:
+            type: "string"
+        - name: "type"
+          in: "query"
+          schema:
+            type: "string"
+            enum:
+              - "imdb"
+              - "tvdb"
+              - "tmdb"
       responses:
         "204":
-          description: "successful operation"          
+          description: "successful operation"
         "400":
           description: "Invalid ID supplied"
         "404":
@@ -339,17 +347,17 @@ paths:
           type: "string"
     put:
       tags:
-      - "External Id"
+        - "External Id"
       summary: "Assign the Playlist to the media item"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AssignPlaylistToMediaRequest"        
+              $ref: "#/components/schemas/AssignPlaylistToMediaRequest"
       responses:
         "200":
-          description: "successful operation"          
+          description: "successful operation"
         "400":
           description: "Invalid ID supplied"
         "404":
@@ -360,10 +368,10 @@ paths:
       summary: "Removes the media item from the Playlist"
       responses:
         "200":
-          description: "successful operation"          
+          description: "successful operation"
         "404":
           description: "Media Item Id not found"
-  /items/byExternalId/{externalId}:   
+  /items/byExternalId/{externalId}:
     parameters:
       - name: "externalId"
         in: "path"
@@ -373,41 +381,41 @@ paths:
           type: "string"
     get:
       tags:
-      - "External Id"
+        - "External Id"
       summary: "Fetch a media item by external Id"
       parameters:
-      - name: "type"
-        in: "query"        
-        schema:
-          type: "string"
-          enum:
-          - "imdb"
-          - "tvdb"
-          - "tmdb"
+        - name: "type"
+          in: "query"
+          schema:
+            type: "string"
+            enum:
+              - "imdb"
+              - "tvdb"
+              - "tmdb"
       responses:
         "200":
           description: "successful operation"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MediaItem"        
+                $ref: "#/components/schemas/MediaItem"
         "405":
           description: "Invalid input"
     post:
       tags:
-      - "mediaitems"
+        - "mediaitems"
       summary: "Add a new media item by external Id"
       parameters:
-      - name: "type"
-        in: "query"        
-        schema:
-          type: "string"
-          enum:
-          - "imdb"
-          - "tvdb"
-          - "tmdb"
+        - name: "type"
+          in: "query"
+          schema:
+            type: "string"
+            enum:
+              - "imdb"
+              - "tvdb"
+              - "tmdb"
       responses:
-        "201":          
+        "201":
           description: "successful operation"
           content:
             application/json:
@@ -422,21 +430,21 @@ paths:
   /remoteUrlUploadRequest:
     get:
       tags:
-      - "Remote Url Upload"
+        - "Remote Url Upload"
       summary: "List all the requests"
       parameters:
-      - name: "status"
-        description: "Pass in a value if filtering is needed"
-        in: "query"        
-        schema:
-          type: "string"
-          enum:
-          - "queued"
-          - "running"
-          - "completed"
-          - "error"
+        - name: "status"
+          description: "Pass in a value if filtering is needed"
+          in: "query"
+          schema:
+            type: "string"
+            enum:
+              - "queued"
+              - "running"
+              - "completed"
+              - "error"
       responses:
-        "200":          
+        "200":
           description: "successful operation"
           content:
             application/json:
@@ -446,7 +454,7 @@ paths:
                   $ref: "#/components/schemas/RemoteUrlRequest"
     post:
       tags:
-      - "Remote Url Upload"
+        - "Remote Url Upload"
       summary: "Create a new remote url upload request"
       requestBody:
         required: true
@@ -455,27 +463,27 @@ paths:
             schema:
               $ref: "#/components/schemas/CreateRemoteUrlRequestCommand"
       responses:
-        "201":          
-            description: "successful operation"
-            content:
-              application/json:
-                schema:
-                  type: "object"
-                  properties:
-                    id:
-                      type: "string"
-                      description: "Id of the created media item"
+        "201":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  id:
+                    type: "string"
+                    description: "Id of the created media item"
         "405":
           description: "Invalid input"
 components:
   securitySchemes:
-    basicAuth:     # <-- arbitrary name for the security scheme
+    basicAuth: # <-- arbitrary name for the security scheme
       type: http
       scheme: basic
-    bearerAuth:            # arbitrary name for the security scheme
+    bearerAuth: # arbitrary name for the security scheme
       type: http
       scheme: bearer
-      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+      bearerFormat: JWT # optional, arbitrary value for documentation purposes
   schemas:
     Playlist:
       type: "object"
@@ -496,7 +504,7 @@ components:
         externalIds:
           type: "array"
           items:
-            $ref: '#/components/schemas/ExternalId'
+            $ref: "#/components/schemas/ExternalId"
         playlistIds:
           type: "array"
           items:
@@ -507,36 +515,36 @@ components:
         title:
           type: "string"
         year:
-          type: "string"      
+          type: "string"
         itemType:
           type: "string"
           enum:
-          - "movie"
-          - "tv"        
+            - "movie"
+            - "tv"
     ExternalId:
       type: "object"
       properties:
         id:
-          type: "string"        
+          type: "string"
         type:
           type: "string"
           description: "Type of External Id"
           enum:
-          - "imdb"
-          - "tvdb"
-          - "other"
+            - "imdb"
+            - "tvdb"
+            - "other"
     AssignExternalIdRequest:
       type: "object"
       properties:
         id:
-          type: "string"        
+          type: "string"
         type:
           type: "string"
           description: "Type of External Id"
           enum:
-          - "imdb"
-          - "tvdb"
-          - "other"
+            - "imdb"
+            - "tvdb"
+            - "other"
     AssignMediaToPlaylistRequest:
       type: "object"
       properties:
@@ -550,7 +558,7 @@ components:
     RemoteUrlRequest:
       type: "object"
       properties:
-        requestId: 
+        requestId:
           type: "string"
         fileUrl:
           type: "string"
@@ -561,10 +569,10 @@ components:
         status:
           type: "string"
           enum:
-          - "queued"
-          - "running"
-          - "completed"
-          - "error"
+            - "queued"
+            - "running"
+            - "completed"
+            - "error"
         message:
           type: "string"
     CreateRemoteUrlRequestCommand:

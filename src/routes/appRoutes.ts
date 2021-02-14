@@ -37,7 +37,7 @@ export class ApplicationRoutes {
     this.router.route("/items/:mediaItemId/favorite").put(asyncHandler(this.mediaItemsController.markItemAsFavorite));
     this.router.route("/items/:mediaItemId/favorite").delete(asyncHandler(this.mediaItemsController.unFavoriteItem));
 
-    this.router.route("/items/:mediaItemId/externalIds").post(asyncHandler(this.mediaItemsController.attachExternalIdToMediaItem));
+    this.router.route("/items/:mediaItemId/externalIds/:externalId").put(asyncHandler(this.mediaItemsController.attachExternalIdToMediaItem));
     this.router.route("/items/:mediaItemId/externalIds").delete(asyncHandler(this.mediaItemsController.detachExternalIdFromMediaItem));
 
     this.router.route("/items/byExternalId/:externalId").get(asyncHandler(this.mediaItemsController.getByExternalId));

@@ -30,7 +30,20 @@ export class PlaylistMediaItemService {
     }
     return null;
   }
-  public async getItems(playlistId?: String): Promise<PlaylistItem[]> {
+  public async getItems(type?: string): Promise<PlaylistItem[]> {
+    const query: any = {};
+    if (type && ['movie', 'tv'].includes(type)) {
+      query['itemType'] = type;
+    }
+    console.log(query);
+    var playlists = await MediaItemDataService.find(query);
+    return playlists && playlists.map((x) =>
+      x.toObject({
+        transform: playlistItemTransformer,
+      }) as PlaylistItem
+    );
+  }
+  public async getPlaylistItems(playlistId?: String): Promise<PlaylistItem[]> {
     const query: any = {};
     playlistId && (query["playlistIds"] = playlistId);
     var playlists = await MediaItemDataService.find(query);
@@ -114,23 +127,9 @@ export class PlaylistMediaItemService {
     const doc: any = await MediaItemDataService.findById(mediaId);
 
     if (doc) {
-      const externalIds: ExternalId[] = doc.externalIds;
-      if (
-        externalIds &&
-        externalIds.some((x) =>
-          x.type === externalId.type && x.id === externalId.id
-        )
-      ) {
-        console.log(
-          `External Id ${externalId.id} already associated with the media item.`,
-        );
-      } else {
-        await MediaItemDataService.updateOne({ _id: doc._id }, {
-          $push: {
-            externalIds: externalId,
-          },
-        });
-      }
+      const propToUpdate: any = {};
+      propToUpdate[`${externalId.type}Id`] = externalId.id;
+      await MediaItemDataService.updateOne({ _id: doc._id }, propToUpdate);
     } else {
       throw new NotFoundException(mediaId);
     }
@@ -138,10 +137,10 @@ export class PlaylistMediaItemService {
 
   public async detachExternalIdFromMediaItem(
     mediaId: string,
-    externalId: ExternalId,
+    externalIdType: string,
   ): Promise<void> {
     const isKnownExternalProvider = knownExternalIdProviders.includes(
-      externalId.type,
+      externalIdType,
     );
     if (!isKnownExternalProvider) {
       throw new ValidationException("Invalid External Provider");
@@ -149,44 +148,35 @@ export class PlaylistMediaItemService {
     const doc: any = await MediaItemDataService.findById(mediaId);
 
     if (doc) {
-      const externalIds: ExternalId[] = doc.externalIds;
-      if (
-        externalIds &&
-        externalIds.some((x) =>
-          x.type === externalId.type && x.id === externalId.id
-        )
-      ) {
-        await MediaItemDataService.updateOne({ _id: doc._id }, {
-          $pull: {
-            externalIds: externalId,
-          },
-        });
-      } else {
-        throw new ValidationException(
-          "Requested external id not found in this media item id.",
-        );
-      }
+      const propToUpdate: any = {};
+      propToUpdate[`${externalIdType}Id`] = 1;
+      await MediaItemDataService.updateOne({ _id: doc._id }, {
+        $unset: propToUpdate
+      });
     } else {
       throw new NotFoundException(mediaId);
     }
   }
 
-  public async getByExternalId(externalId: string, type: string) {
-    console.log(externalId, type);
-    const isKnownExternalProvider = knownExternalIdProviders.includes(type);
+  public async getByExternalId(extId: ExternalId) {
+    const isKnownExternalProvider = knownExternalIdProviders.includes(extId.type);
     if (!isKnownExternalProvider) {
       throw new ValidationException("Invalid External Provider");
     }
 
+    let searchDelegate: any = {};
+    searchDelegate[`${extId.type}Id`] = extId.id;
+
     var mediaItem = await MediaItemDataService.findOne(
-      { externalIds: { id: externalId, type: type } },
+      searchDelegate
     );
     if (mediaItem) {
       return mediaItem.toObject({
         transform: playlistItemTransformer,
       });
+    } else {
+      throw new NotFoundException(extId.id);
     }
-    return null;
   }
 
   public async createMediaByExternalId(extId: ExternalId) {
@@ -197,40 +187,17 @@ export class PlaylistMediaItemService {
       throw new ValidationException("Only IMDB External Provider is supported now.");
     }
 
+    let searchDelegate: any = {};
+    searchDelegate[`${extId.type}Id`] = extId.id;
+
     var mediaItem = await MediaItemDataService.findOne(
-      { externalIds: extId },
+      searchDelegate
     );
+
     if (mediaItem) {
       throw new ValidationException("External Id already present.");
     }
-
-    const tmdbResponse: any = await _tmdbWrapperService.getByImdbId(extId.id);
-    let itemToAdd = {
-      externalIds: [extId]
-    } as PlaylistItem;
-    let result;
-    if (tmdbResponse.movie_results?.length) {
-      result = tmdbResponse.movie_results[0];
-      itemToAdd.title = result.title;
-      itemToAdd.year = result.release_date.substr(0, 4);
-      itemToAdd.itemType = 'Movie';
-      itemToAdd.tagline = result.tagline;
-      itemToAdd.runtime = result.runtime;
-    } else if (tmdbResponse.tv_results?.length) {
-      result = tmdbResponse.tv_results[0];
-      itemToAdd.title = result.name;
-      itemToAdd.year = result.first_air_date.substr(0, 4);
-      itemToAdd.itemType = 'TV';
-    } else {
-      throw new ValidationException('Unable to fetch external id');
-    }
-    itemToAdd.posterPath = result.poster_path;
-    itemToAdd.backdropPath = result.backdrop_path;
-    itemToAdd.overview = result.overview;
-    itemToAdd.externalIds.push({
-      id: result.id,
-      type: 'tmdb'
-    });
+    const itemToAdd = await _tmdbWrapperService.getByImdbId(extId.id);
     const createdDocument = await MediaItemDataService.create(itemToAdd);
     return createdDocument._id;
   }

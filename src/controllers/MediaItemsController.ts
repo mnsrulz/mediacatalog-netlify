@@ -3,8 +3,8 @@ import { PlaylistMediaItemService } from "../services/playlistMediaItemService";
 const _playlistMediaItemService = new PlaylistMediaItemService();
 
 export class MediaItemsController {
-  public async list(req: Request, res: Response) {
-    const items = await _playlistMediaItemService.getItems();
+  public async list(req: Request, res: Response) {    
+    const items = await _playlistMediaItemService.getItems(req.query.type as string);
     res.json(items);
   }
 
@@ -24,17 +24,23 @@ export class MediaItemsController {
   }
 
   public async attachExternalIdToMediaItem(req: Request, res: Response) {
-    await _playlistMediaItemService.attachExternalIdToMediaItem(req.params.mediaItemId, req.body);
+    await _playlistMediaItemService.attachExternalIdToMediaItem(req.params.mediaItemId, {
+      id: req.params.externalId,
+      type: req.query['type'] as string
+    });
     res.status(200).send();
   }
   public async detachExternalIdFromMediaItem(req: Request, res: Response) {
-    await _playlistMediaItemService.detachExternalIdFromMediaItem(req.params.mediaItemId, req.body);
+    await _playlistMediaItemService.detachExternalIdFromMediaItem(req.params.mediaItemId, req.query['type'] as string);
     res.status(204).send();
   }
 
 
   public async getByExternalId(req: Request, res: Response) {
-    const item = await _playlistMediaItemService.getByExternalId(req.params.externalId, req.query['type'] as string);
+    const item = await _playlistMediaItemService.getByExternalId({
+      id: req.params.externalId,
+      type: req.query['type'] as string
+    });
     res.json(item);
   }
 

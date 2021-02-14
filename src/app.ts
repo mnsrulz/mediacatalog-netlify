@@ -10,7 +10,7 @@ import passport from "passport";
 
 var GoogleTokenStrategy = require('passport-google-id-token');
 import { BasicStrategy } from 'passport-http';
-import { ValidationException } from "./exceptions/exceptions";
+import { NotFoundException, ValidationException } from "./exceptions/exceptions";
 
 const mongoUrl: string = configs.mongoUri;
 
@@ -64,6 +64,11 @@ class App {
       if (err instanceof ValidationException) {
         res.status(400).json({
           status: 'validation error',
+          message: err.message
+        });
+      } else if(err instanceof NotFoundException){
+        res.status(404).json({
+          status: 'Not found',
           message: err.message
         });
       } else {

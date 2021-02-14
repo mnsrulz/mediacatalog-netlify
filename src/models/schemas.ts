@@ -14,14 +14,22 @@ export const MediaItemSchema = new Schema({
   title: String,
   year: Number,
   itemType: String,
-  externalIds: {},
   playlistIds: [{
     type: String,
   }],
   favorite: {
     type: Boolean,
     default: false
-  }
+  },
+  backdropPath: String,
+  posterPath: String,
+  tagline: String,
+  overview: String,
+  runtime: String,
+  customBackdropPath: String,
+  customPosterPath: String,
+  imdbId: String,
+  tmdbId: String
 }, { collection: "mediaItem" });
 
 export const RemoteUrlUploadRequestSchema = new Schema({

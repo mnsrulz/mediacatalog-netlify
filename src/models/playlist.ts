@@ -4,11 +4,10 @@ export interface Playlist {
 }
 
 export interface PlaylistItem {
-  id: String;
-  itemType: String;
-  title: String;
-  year: String;
-  externalIds: ExternalId[];
+  id: string;
+  itemType: string;
+  title: string;
+  year: string;
   playlistIds: string[];
   backdropPath: string;
   posterPath: string;
@@ -17,6 +16,8 @@ export interface PlaylistItem {
   runtime: string;
   customBackdropPath: string;
   customPosterPath: string;
+  tmdbId: string;
+  imdbId: string;
 }
 
 export interface ExternalId {
