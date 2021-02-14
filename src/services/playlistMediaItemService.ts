@@ -214,6 +214,8 @@ export class PlaylistMediaItemService {
       itemToAdd.title = result.title;
       itemToAdd.year = result.release_date.substr(0, 4);
       itemToAdd.itemType = 'Movie';
+      itemToAdd.tagline = result.tagline;
+      itemToAdd.runtime = result.runtime;
     } else if (tmdbResponse.tv_results?.length) {
       result = tmdbResponse.tv_results[0];
       itemToAdd.title = result.name;
@@ -222,6 +224,9 @@ export class PlaylistMediaItemService {
     } else {
       throw new ValidationException('Unable to fetch external id');
     }
+    itemToAdd.posterPath = result.poster_path;
+    itemToAdd.backdropPath = result.backdrop_path;
+    itemToAdd.overview = result.overview;
     itemToAdd.externalIds.push({
       id: result.id,
       type: 'tmdb'
