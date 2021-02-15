@@ -35,8 +35,7 @@ export class PlaylistMediaItemService {
     if (type && ['movie', 'tv'].includes(type)) {
       query['itemType'] = type;
     }
-    console.log(query);
-    var playlists = await MediaItemDataService.find(query);
+    var playlists = await MediaItemDataService.find(query).limit(100);
     return playlists && playlists.map((x) =>
       x.toObject({
         transform: playlistItemTransformer,
