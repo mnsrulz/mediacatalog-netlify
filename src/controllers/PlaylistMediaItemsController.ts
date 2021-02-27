@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PlaylistMediaItemService } from "../services/playlistMediaItemService";
+import { PlaylistMediaItemService } from "../services/PlaylistMediaItemService";
 const _playlistMediaItemService = new PlaylistMediaItemService();
 export class PlaylistMediaItemsController {
   public async list(req: Request, res: Response) {

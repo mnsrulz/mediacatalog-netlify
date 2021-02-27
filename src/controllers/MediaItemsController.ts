@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PlaylistMediaItemService } from "../services/playlistMediaItemService";
+import { PlaylistMediaItemService } from "../services/PlaylistMediaItemService";
 const _playlistMediaItemService = new PlaylistMediaItemService();
 
 export class MediaItemsController {
@@ -59,7 +59,7 @@ export class MediaItemsController {
   }
 
   public async unFavoriteItem(req: Request, res: Response) {
-    const id = await _playlistMediaItemService.unafavoriteItem(req.params.mediaItemId);
+    const id = await _playlistMediaItemService.unFavoriteItem(req.params.mediaItemId);
     res.status(204).send({ id });
   }
 

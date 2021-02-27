@@ -5,7 +5,7 @@ import {
 } from "../exceptions/exceptions";
 import { MediaItemSchema, RemoteUrlUploadRequestSchema } from "../models/schemas";
 import { ExternalId, PlaylistItem } from "../models/playlist";
-import { TmdbWrapperService } from "./tmbdWrapper";
+import { TmdbWrapperService } from "./TmdbWrapperService";
 
 const _tmdbWrapperService = new TmdbWrapperService();
 
@@ -215,7 +215,7 @@ export class PlaylistMediaItemService {
     }
   }
 
-  public async unafavoriteItem(
+  public async unFavoriteItem(
     mediaId: string
   ): Promise<void> {
     const doc: any = await MediaItemDataService.findById(mediaId);

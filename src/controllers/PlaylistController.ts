@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PlaylistService } from "../services/playlistService";
+import { PlaylistService } from "../services/PlaylistService";
 const _playlistService = new PlaylistService();
 export class PlaylistController {
   //_playlistService: PlaylistService;
