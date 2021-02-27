@@ -90,7 +90,7 @@ paths:
   /playlists/{playlistId}/items:
     get:
       tags:
-        - "playlist"
+        - "Playlist Media Items"
       summary: "List items in the playlist"
       parameters:
         - name: "playlistId"
@@ -113,7 +113,7 @@ paths:
   /playlists/{playlistId}/items/{mediaItemId}:
     put:
       tags:
-        - "playlist"
+        - "Playlist Media Items"
       summary: "Add item in the playlist"
       parameters:
         - name: "playlistId"
@@ -141,7 +141,7 @@ paths:
           description: "Playlist not found"
     delete:
       tags:
-        - "playlist"
+        - "Playlist Media Items"
       summary: "Removes item from the playlist"
       parameters:
         - name: "playlistId"
@@ -347,7 +347,7 @@ paths:
           type: "string"
     put:
       tags:
-        - "External Id"
+        - "Playlist Media Items"
       summary: "Assign the Playlist to the media item"
       requestBody:
         required: true
@@ -364,7 +364,7 @@ paths:
           description: "Media Item Id not found"
     delete:
       tags:
-        - "External Id"
+        - "Playlist Media Items"
       summary: "Removes the media item from the Playlist"
       responses:
         "200":
@@ -381,7 +381,7 @@ paths:
           type: "string"
     get:
       tags:
-        - "External Id"
+        - "mediaitems"
       summary: "Fetch a media item by external Id"
       parameters:
         - name: "type"
@@ -533,23 +533,6 @@ components:
             - "imdb"
             - "tvdb"
             - "other"
-    AssignExternalIdRequest:
-      type: "object"
-      properties:
-        id:
-          type: "string"
-        type:
-          type: "string"
-          description: "Type of External Id"
-          enum:
-            - "imdb"
-            - "tvdb"
-            - "other"
-    AssignMediaToPlaylistRequest:
-      type: "object"
-      properties:
-        mediaItemId:
-          type: "string"
     AssignPlaylistToMediaRequest:
       type: "object"
       properties:
@@ -584,16 +567,6 @@ components:
           type: "array"
           items:
             type: "string"
-    ApiResponse:
-      type: "object"
-      properties:
-        code:
-          type: "integer"
-          format: "int32"
-        type:
-          type: "string"
-        message:
-          type: "string"
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"
