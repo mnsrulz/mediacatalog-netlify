@@ -3,7 +3,7 @@ import {
   NotFoundException,
   ValidationException,
 } from "../exceptions/exceptions";
-import { MediaItemSchema, RemoteUrlUploadRequestSchema } from "../models/Schemas";
+import { MediaItemSchema, RemoteUrlUploadRequestSchema } from "../models/ModelSchemas";
 import { ExternalId } from "../models/ExternalId";
 import { MediaItem } from "../models/MediaItem";
 import { TmdbWrapperService } from "./TmdbWrapperService";

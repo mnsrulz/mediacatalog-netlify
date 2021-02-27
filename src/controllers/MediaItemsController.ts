@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PlaylistMediaItemService } from "../services/PlaylistMediaItemService";
+import { PlaylistMediaItemService } from "../services/MediaItemService";
 const _playlistMediaItemService = new PlaylistMediaItemService();
 
 export class MediaItemsController {
