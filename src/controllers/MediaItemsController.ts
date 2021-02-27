@@ -4,7 +4,7 @@ const _playlistMediaItemService = new PlaylistMediaItemService();
 
 export class MediaItemsController {
   public async list(req: Request, res: Response) {    
-    const items = await _playlistMediaItemService.getItems(req.query.type as string);
+    const items = await _playlistMediaItemService.getItems(req.query.type as string, req.query.q as string);
     res.json(items);
   }
 

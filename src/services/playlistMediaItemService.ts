@@ -31,11 +31,15 @@ export class PlaylistMediaItemService {
     }
     return null;
   }
-  public async getItems(type?: string): Promise<MediaItem[]> {
+  public async getItems(type?: string, search?: string): Promise<MediaItem[]> {
     const query: any = {};
     if (type && ['movie', 'tv'].includes(type)) {
       query['itemType'] = type;
     }
+    if (search) {
+      query['title'] = new RegExp(search, 'i');
+    }
+    
     var playlists = await MediaItemDataService.find(query).limit(100);
     return playlists && playlists.map((x) =>
       x.toObject({
