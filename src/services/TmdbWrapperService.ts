@@ -1,13 +1,13 @@
 import configs from "../configs/config";
 const apiKey = configs.tmdbApiSecret;
 import got from "got";
-import { PlaylistItem } from "../models/playlist";
+import { MediaItem } from "../models/MediaItem";
 
 const tmdbApiUrl = "https://api.themoviedb.org/3";
 
 export class TmdbWrapperService {
 
-  public async getByImdbId(external_id: any): Promise<PlaylistItem | null> {
+  public async getByImdbId(external_id: any): Promise<MediaItem | null> {
     const findUrl =
       `${tmdbApiUrl}/find/${external_id}?api_key=${apiKey}&language=en-US&external_source=imdb_id`;
     const body: any = await got(findUrl, {
@@ -16,7 +16,7 @@ export class TmdbWrapperService {
     });
 
     const result = body.movie_results[0] || body.tv_results[0];
-    let itemToReturn = {} as PlaylistItem;
+    let itemToReturn = {} as MediaItem;
     if (body.movie_results[0]?.id) {
       itemToReturn = await this.getByTmdbId(result.id, 'movie');
     } else if (body.tv_results[0]?.id) {
@@ -28,7 +28,7 @@ export class TmdbWrapperService {
     return itemToReturn;
   }
 
-  public async getByTmdbId(id: any, type: string): Promise<PlaylistItem> {
+  public async getByTmdbId(id: any, type: string): Promise<MediaItem> {
     const tmdbByIdUrl = `https://api.themoviedb.org/3/${type}/${id}?&api_key=${apiKey}`;
     const result: any = await got(tmdbByIdUrl, {
       responseType: "json",
@@ -45,7 +45,7 @@ export class TmdbWrapperService {
       overview: result.overview,
       tmdbId: id,
       itemType: type
-    } as PlaylistItem;
+    } as MediaItem;
     return playlistItem;
   }
 }

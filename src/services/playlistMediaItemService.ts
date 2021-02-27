@@ -3,8 +3,9 @@ import {
   NotFoundException,
   ValidationException,
 } from "../exceptions/exceptions";
-import { MediaItemSchema, RemoteUrlUploadRequestSchema } from "../models/schemas";
-import { ExternalId, PlaylistItem } from "../models/playlist";
+import { MediaItemSchema, RemoteUrlUploadRequestSchema } from "../models/Schemas";
+import { ExternalId } from "../models/ExternalId";
+import { MediaItem } from "../models/MediaItem";
 import { TmdbWrapperService } from "./TmdbWrapperService";
 
 const _tmdbWrapperService = new TmdbWrapperService();
@@ -30,7 +31,7 @@ export class PlaylistMediaItemService {
     }
     return null;
   }
-  public async getItems(type?: string): Promise<PlaylistItem[]> {
+  public async getItems(type?: string): Promise<MediaItem[]> {
     const query: any = {};
     if (type && ['movie', 'tv'].includes(type)) {
       query['itemType'] = type;
@@ -39,21 +40,21 @@ export class PlaylistMediaItemService {
     return playlists && playlists.map((x) =>
       x.toObject({
         transform: playlistItemTransformer,
-      }) as PlaylistItem
+      }) as MediaItem
     );
   }
-  public async getPlaylistItems(playlistId?: String): Promise<PlaylistItem[]> {
+  public async getPlaylistItems(playlistId?: String): Promise<MediaItem[]> {
     const query: any = {};
     playlistId && (query["playlistIds"] = playlistId);
     var playlists = await MediaItemDataService.find(query);
     return playlists && playlists.map((x) =>
       x.toObject({
         transform: playlistItemTransformer,
-      }) as PlaylistItem
+      }) as MediaItem
     );
   }
 
-  public async addMediaItem(item: PlaylistItem): Promise<String> {
+  public async addMediaItem(item: MediaItem): Promise<String> {
     const itemToAdd = {
       title: item.title,
       year: item.year,

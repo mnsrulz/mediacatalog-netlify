@@ -1,7 +1,7 @@
 import * as mongoose from "mongoose";
 
-import { PlaylistSchema } from "../models/schemas";
-import { Playlist } from "../models/playlist";
+import { PlaylistSchema } from "../models/Schemas";
+import { Playlist } from "../models/Playlist";
 
 const PlaylistDataService = mongoose.model("PlaylistSchema", PlaylistSchema);
 

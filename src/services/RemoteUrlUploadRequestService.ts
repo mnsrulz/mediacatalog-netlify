@@ -1,7 +1,7 @@
 import * as mongoose from "mongoose";
 import uniqid from "uniqid";
 import { GetRemoteUrlUploadRequest, RemoteUrlUploadRequest } from "../models/remoteUrlUploadRequest";
-import { RemoteUrlUploadRequestSchema } from "../models/schemas";
+import { RemoteUrlUploadRequestSchema } from "../models/Schemas";
 
 export const RemoteUrlUploadDataService = mongoose.model("RemoteUrlUploadRequestSchema", RemoteUrlUploadRequestSchema);
 
