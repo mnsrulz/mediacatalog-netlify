@@ -3,7 +3,7 @@ import { PlaylistMediaItemService } from "../services/MediaItemService";
 const _playlistMediaItemService = new PlaylistMediaItemService();
 export class PlaylistMediaItemsController {
   public async list(req: Request, res: Response) {
-    const items = await _playlistMediaItemService.getItems(
+    const items = await _playlistMediaItemService.getPlaylistItems(
       req.params.playlistId,
     );
     res.json(items);

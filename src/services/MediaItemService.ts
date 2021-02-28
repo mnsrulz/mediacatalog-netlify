@@ -39,7 +39,7 @@ export class PlaylistMediaItemService {
     if (search) {
       query['title'] = new RegExp(search, 'i');
     }
-    
+
     var playlists = await MediaItemDataService.find(query).limit(100);
     return playlists && playlists.map((x) =>
       x.toObject({
@@ -49,13 +49,18 @@ export class PlaylistMediaItemService {
   }
   public async getPlaylistItems(playlistId?: String): Promise<MediaItem[]> {
     const query: any = {};
-    playlistId && (query["playlistIds"] = playlistId);
-    var playlists = await MediaItemDataService.find(query);
-    return playlists && playlists.map((x) =>
-      x.toObject({
-        transform: playlistItemTransformer,
-      }) as MediaItem
-    );
+    if (playlistId) {
+      query["playlistIds"] = { "$in": [playlistId] };
+      var playlists = await MediaItemDataService.find(query);
+      return playlists && playlists.map((x) =>
+        x.toObject({
+          transform: playlistItemTransformer,
+        }) as MediaItem
+      );
+    } else {
+      throw new ValidationException('Playlist id is required');
+    }
+
   }
 
   public async addMediaItem(item: MediaItem): Promise<String> {
