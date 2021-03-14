@@ -182,7 +182,7 @@ paths:
         - name: "q"
           in: "query"
           schema:
-            type: "string"            
+            type: "string"
       responses:
         "200":
           description: "successful operation"
@@ -479,6 +479,52 @@ paths:
                     description: "Id of the created media item"
         "405":
           description: "Invalid input"
+  /crawler/hdhub:
+    get:
+      tags:
+        - "Crawlers"
+      summary: "Gets the latest entry of this crawler"
+      responses:
+        "200":
+          description: "successful operation"
+    post:
+      tags:
+        - "Crawlers"
+      summary: "Crawl Hdhub"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  count:
+                    type: "string"
+                    description: "Number of objects created"
+  /crawler/extramovies:
+    get:
+      tags:
+        - "Crawlers"
+      summary: "Gets the latest entry of this crawler"
+      responses:
+        "200":
+          description: "successful operation"
+    post:
+      tags:
+        - "Crawlers"
+      summary: "Crawl extramovies"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  count:
+                    type: "string"
+                    description: "Number of objects created"
 components:
   securitySchemes:
     basicAuth: # <-- arbitrary name for the security scheme

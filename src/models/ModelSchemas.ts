@@ -44,3 +44,24 @@ export const RemoteUrlUploadRequestSchema = new Schema({
   status: String,
   message: String
 }, { collection: "remoteUrlUploadRequest" });
+
+export const CrawlerConfig = new Schema({
+  name: String,
+  internalType: String  
+})
+
+export const MediaSourceSchema = new Schema({
+  ts: {
+    type: Date,
+    default: Date.now(),
+  },
+  externalId: String,
+  title: String,
+  webViewLink: String,
+  created: Date,
+  modified: Date,
+  slug: String,
+  renderedContent: String,
+  renderedTitle: String,
+  crawlerType: String
+}, { collection: "mediaSource" });

@@ -5,6 +5,7 @@ import { PlaylistController } from "../controllers/PlaylistController";
 import { PlaylistMediaItemsController } from "../controllers/PlaylistMediaItemsController";
 import { MediaItemsController } from "../controllers/MediaItemsController";
 import { RemoteUrlUploadRequestController } from "../controllers/RemoteUrlUploadRequestController";
+import { CrawlerController } from "../controllers/CrawlerController";
 
 import asyncHandler from 'express-async-handler';
 
@@ -14,12 +15,14 @@ export class ApplicationRoutes {
   playlistMediaItemsController: PlaylistMediaItemsController;
   mediaItemsController: MediaItemsController;
   remoteUrlUploadRequestController: RemoteUrlUploadRequestController;
+  crawlerController: CrawlerController;
   constructor() {
     this.router = express.Router();
     this.playlistController = new PlaylistController();
     this.playlistMediaItemsController = new PlaylistMediaItemsController();
     this.mediaItemsController = new MediaItemsController();
     this.remoteUrlUploadRequestController = new RemoteUrlUploadRequestController();
+    this.crawlerController = new CrawlerController();
 
     this.router.route("/playlists").get(asyncHandler(this.playlistController.list));
     this.router.route("/playlists/:playlistId").get(asyncHandler(this.playlistController.get));
@@ -45,9 +48,13 @@ export class ApplicationRoutes {
 
     this.router.route("/remoteUrlUploadRequest").get(asyncHandler(this.remoteUrlUploadRequestController.list));
     this.router.route("/remoteUrlUploadRequest").post(asyncHandler(this.remoteUrlUploadRequestController.create));
+
+    this.router.route("/crawler/hdhub").get(asyncHandler(this.crawlerController.fetchLatestHdhub));
+    this.router.route("/crawler/hdhub").post(asyncHandler(this.crawlerController.crawlHdhub));
+    
+    this.router.route("/crawler/extramovies").get(asyncHandler(this.crawlerController.fetchLatestExtramovies));
+    this.router.route("/crawler/extramovies").post(asyncHandler(this.crawlerController.crawlExtramovies));
   }
-
-
 
   public getRoutes(): IRouter {
     return this.router;
