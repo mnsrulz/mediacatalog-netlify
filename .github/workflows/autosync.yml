@@ -13,8 +13,7 @@ jobs:
   deployment:
     runs-on: ubuntu-latest
     steps:
-    - name: Deploy Stage
-      uses: fjogeleit/http-request-action@master
+    - name: Hit curl1
+      uses: wei/curl@v1
       with:
-        url: ${{ secrets.curl1 }}
-        method: 'POST'
+        args: -X POST ${{ secrets.curl1 }}
