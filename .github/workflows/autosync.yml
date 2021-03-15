@@ -1,0 +1,19 @@
+# This is a basic workflow to help you get started with Actions
+
+name: curl1
+
+# Controls when the action will run. 
+on:
+  schedule:
+    - cron: '* * * * *'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy Stage
+      uses: fjogeleit/http-request-action@master
+      with:
+        url: ${{ secrets.curl1 }}
+        method: 'POST'
