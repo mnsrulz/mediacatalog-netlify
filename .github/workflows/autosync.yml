@@ -4,6 +4,7 @@ name: curl1
 
 # Controls when the action will run. 
 on:
+  push:
   schedule:
     - cron: '*/5 * * * *'
 
