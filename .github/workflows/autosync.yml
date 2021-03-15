@@ -13,7 +13,11 @@ jobs:
   deployment:
     runs-on: ubuntu-latest
     steps:
-    - name: Hit curl1
+    - name: Hit HD_HU
       uses: wei/curl@v1
       with:
-        args: -X POST ${{secrets.CURL1}} -d ''
+        args: -X POST ${{secrets.CURL_HD_HU_WITH_CRED}} -d ''
+    - name: Hit EX_MO
+      uses: wei/curl@v1
+      with:
+        args: -X POST ${{secrets.CURL_EX_MO_WITH_CRED}} -d ''
