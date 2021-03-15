@@ -16,4 +16,4 @@ jobs:
     - name: Hit curl1
       uses: wei/curl@v1
       with:
-        args: -X POST https://httpbin.org/get
+        args: -X POST ${{secrets.CURL1}}
