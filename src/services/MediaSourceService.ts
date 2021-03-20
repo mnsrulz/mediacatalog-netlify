@@ -1,6 +1,8 @@
 import * as mongoose from "mongoose";
 import { MediaSource } from "../models/MediaSource";
+import { PagedRespone } from "../models/PagedRespone";
 import { MediaSourceSchema } from "../models/ModelSchemas";
+import { NotFoundException } from "../exceptions/exceptions";
 
 export const MediaSourceDataService = mongoose.model("MediaSourceSchema", MediaSourceSchema);
 
@@ -31,5 +33,49 @@ export class MediaSourceService {
             externalId: mediaSource.externalId
         }, mediaSource, { upsert: true });
         return upsertResult;
+    }
+
+    public async getItems(pageNumber: number, pageSize: number, search?: string,): Promise<PagedRespone<MediaSource>> {
+        const query: any = {};
+        if (search) {
+            query['renderedTitle'] = new RegExp(search, 'i');
+        }
+        const skip = (pageNumber - 1) * pageSize;
+        const total = await MediaSourceDataService.find(query).count();
+        const items = await MediaSourceDataService.find(query).sort({ '_id': -1 }).skip(skip).limit(pageSize);
+        const itemsArray = items && items.map((x) =>
+            x.toObject({
+                transform: _transformer,
+            }) as MediaSource
+        );
+        return {
+            items: itemsArray,
+            pageNumber,
+            pageSize,
+            total,
+            count: items.length
+        } as PagedRespone<MediaSource>
+    }
+
+    public async attachMediaItem(mediaSourceId: string, mediaItemId: string): Promise<void> {
+        const doc: any = await MediaSourceDataService.findById(mediaSourceId);
+        if (doc) {
+            const propToUpdate: any = {};
+            propToUpdate[`mediaItemId`] = mediaItemId;
+            await MediaSourceDataService.updateOne({ _id: doc._id }, propToUpdate);
+        } else {
+            throw new NotFoundException(mediaSourceId);
+        }
+    }
+
+    public async detachMediaItem(mediaSourceId: string, mediaItemId: string): Promise<void> {
+        const doc: any = await MediaSourceDataService.findById(mediaSourceId);
+        if (doc) {
+            const propToUpdate: any = {};
+            propToUpdate[`mediaItemId`] = mediaItemId;
+            await MediaSourceDataService.updateOne({ _id: doc._id }, { $unset: propToUpdate });
+        } else {
+            throw new NotFoundException(mediaSourceId);
+        }
     }
 }

@@ -525,6 +525,65 @@ paths:
                   count:
                     type: "string"
                     description: "Number of objects created"
+  /mediasources:
+    get:
+      tags:
+        - "Media Source"
+      parameters:
+        - name: "pageSize"
+          in: "query"
+          schema:
+            type: "number"            
+        - name: "pageNumber"
+          in: "query"
+          schema:
+            type: "number"            
+        - name: "q"
+          in: "query"
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: "object"
+  /mediasources/{mediaSourceId}/mediaItemId/{mediaItemId}:
+    parameters:
+      - name: "mediaSourceId"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      - name: "mediaItemId"
+        in: "path"
+        description: "Media Item Id"
+        required: true
+        schema:
+          type: "string"
+    put:
+      tags:
+        - "Media Source"
+      summary: "Assign the media item id to the media source"
+      responses:
+        "200":
+          description: "successful operation"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Media Item Id not found"
+    delete:
+      tags:
+        - "Media Source"
+      summary: "Removes the media item id from the media source"
+      responses:
+        "204":
+          description: "successful operation"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Media Item Id not found"
 components:
   securitySchemes:
     basicAuth: # <-- arbitrary name for the security scheme
