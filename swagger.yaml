@@ -542,6 +542,10 @@ paths:
           in: "query"
           schema:
             type: "string"
+        - name: "onlyPendingMediaAssignment"
+          in: "query"
+          schema:
+            type: "boolean"
       responses:
         "200":
           description: "successful operation"

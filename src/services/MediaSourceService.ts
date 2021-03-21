@@ -8,7 +8,7 @@ export const MediaSourceDataService = mongoose.model("MediaSourceSchema", MediaS
 const _mediaNameParserService = new MediaNameParserService();
 
 const _transformer = (doc: any, ret: any) => {
-    ret.id = ret._id;    
+    ret.id = ret._id;
     delete ret["_id"];
     delete ret["__v"];
     return ret;
@@ -37,15 +37,18 @@ export class MediaSourceService {
         return upsertResult;
     }
 
-    public async getItems(pageNumber: number, pageSize: number, search?: string,): Promise<PagedRespone<MediaSource>> {
+    public async getItems(pageNumber: number, pageSize: number, search?: string, onlyPendingMediaItem?: boolean): Promise<PagedRespone<MediaSource>> {
         const query: any = {};
         if (search) {
             query['renderedTitle'] = new RegExp(search, 'i');
         }
+        if (onlyPendingMediaItem) {
+            query['mediaItemId'] = null;
+        }
         const skip = (pageNumber - 1) * pageSize;
         const total = await MediaSourceDataService.find(query).estimatedDocumentCount();
         const items = await MediaSourceDataService.find(query).sort({ '_id': -1 }).skip(skip).limit(pageSize);
-        const itemsArray = items && items.map((x:any) =>
+        const itemsArray = items && items.map((x: any) =>
             x.toObject({
                 transform: _transformer,
             }) as MediaSource
