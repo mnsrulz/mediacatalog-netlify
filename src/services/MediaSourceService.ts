@@ -3,11 +3,13 @@ import { MediaSource } from "../models/MediaSource";
 import { PagedRespone } from "../models/PagedRespone";
 import { MediaSourceSchema } from "../models/ModelSchemas";
 import { NotFoundException } from "../exceptions/exceptions";
-
+import { MediaNameParserService } from "./Crawlers/MediaNameParserService";
 export const MediaSourceDataService = mongoose.model("MediaSourceSchema", MediaSourceSchema);
+const _mediaNameParserService = new MediaNameParserService();
 
 const _transformer = (doc: any, ret: any) => {
     ret.id = ret._id;
+    ret.parsedInfo = _mediaNameParserService.parse(ret.renderedTitle);
     delete ret["_id"];
     delete ret["__v"];
     return ret;
@@ -28,6 +30,7 @@ export class MediaSourceService {
     }
 
     public async upsertMediaSource(mediaSource: MediaSource): Promise<any> {
+        mediaSource.parserInfo = mediaSource.parserInfo || _mediaNameParserService.parse(mediaSource.renderedTitle);
         const upsertResult = await MediaSourceDataService.findOneAndUpdate({
             crawlerType: mediaSource.crawlerType,
             externalId: mediaSource.externalId
@@ -41,9 +44,9 @@ export class MediaSourceService {
             query['renderedTitle'] = new RegExp(search, 'i');
         }
         const skip = (pageNumber - 1) * pageSize;
-        const total = await MediaSourceDataService.find(query).count();
+        const total = await MediaSourceDataService.find(query).estimatedDocumentCount();
         const items = await MediaSourceDataService.find(query).sort({ '_id': -1 }).skip(skip).limit(pageSize);
-        const itemsArray = items && items.map((x) =>
+        const itemsArray = items && items.map((x:any) =>
             x.toObject({
                 transform: _transformer,
             }) as MediaSource

@@ -3,7 +3,7 @@ import {
   NotFoundException,
   ValidationException,
 } from "../exceptions/exceptions";
-import { MediaItemSchema, RemoteUrlUploadRequestSchema } from "../models/ModelSchemas";
+import { MediaItemSchema } from "../models/ModelSchemas";
 import { ExternalId } from "../models/ExternalId";
 import { MediaItem } from "../models/MediaItem";
 import { TmdbWrapperService } from "./TmdbWrapperService";
@@ -40,8 +40,8 @@ export class PlaylistMediaItemService {
       query['title'] = new RegExp(search, 'i');
     }
 
-    var playlists = await MediaItemDataService.find(query).limit(100);
-    return playlists && playlists.map((x) =>
+    var items = await MediaItemDataService.find(query).limit(100);
+    return items && items.map((x: any) =>
       x.toObject({
         transform: playlistItemTransformer,
       }) as MediaItem
@@ -52,9 +52,9 @@ export class PlaylistMediaItemService {
     if (playlistId) {
       query["playlistIds"] = { "$in": [playlistId] };
       var playlists = await MediaItemDataService.find(query);
-      return playlists && playlists.map((x) =>
+      return playlists && playlists.map((x: any) =>
         x.toObject({
-          transform: playlistItemTransformer,
+          transform: playlistItemTransformer
         }) as MediaItem
       );
     } else {

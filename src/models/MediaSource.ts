@@ -6,5 +6,6 @@ export interface MediaSource {
   slug: string,
   renderedContent: string,
   renderedTitle: string,
-  crawlerType: 'hdhub' | 'extramovies' | 'other'
+  crawlerType: 'hdhub' | 'extramovies' | 'other',
+  parserInfo: object
 }

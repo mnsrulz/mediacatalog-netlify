@@ -18,7 +18,7 @@ export class RemoteUrlUploadRequestService {
         const query: any = {};
         status && (query["status"] = status);
         var requests = await RemoteUrlUploadDataService.find(query);
-        return requests && requests.map((x) =>
+        return requests && requests.map((x:any) =>
             x.toObject({
                 transform: _transformer,
             }) as GetRemoteUrlUploadRequest

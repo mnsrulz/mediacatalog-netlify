@@ -63,5 +63,7 @@ export const MediaSourceSchema = new Schema({
   slug: String,
   renderedContent: String,
   renderedTitle: String,
-  crawlerType: String
+  crawlerType: String,
+  mediaItemId: String,
+  parserInfo: Object
 }, { collection: "mediaSource" });
