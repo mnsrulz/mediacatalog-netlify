@@ -8,8 +8,7 @@ export const MediaSourceDataService = mongoose.model("MediaSourceSchema", MediaS
 const _mediaNameParserService = new MediaNameParserService();
 
 const _transformer = (doc: any, ret: any) => {
-    ret.id = ret._id;
-    ret.parsedInfo = _mediaNameParserService.parse(ret.renderedTitle);
+    ret.id = ret._id;    
     delete ret["_id"];
     delete ret["__v"];
     return ret;
