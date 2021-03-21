@@ -542,6 +542,11 @@ paths:
           in: "query"
           schema:
             type: "string"
+        - name: "parsedTitle"
+          in: "query"
+          description: "use to find other related media items whose parsed title matches with this one"
+          schema:
+            type: "string"
         - name: "onlyPendingMediaAssignment"
           in: "query"
           schema:

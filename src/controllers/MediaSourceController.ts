@@ -7,7 +7,7 @@ export class MediaSourceController {
     const pageSize = parseInt(req.query.pageSize as string) || 20;
     const pageNumber = parseInt(req.query.pageNumber as string) || 1;
     const onlyPendingMediaAssignment = (req.query.onlyPendingMediaAssignment as string)?.toLowerCase() === 'true';
-    const items = await _mediaSourceService.getItems(pageNumber, pageSize, req.query.q as string, onlyPendingMediaAssignment)
+    const items = await _mediaSourceService.getItems(pageNumber, pageSize, req.query.q as string, onlyPendingMediaAssignment, req.query.parsedTitle as string)
     res.json(items);
   }
 

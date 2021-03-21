@@ -37,10 +37,13 @@ export class MediaSourceService {
         return upsertResult;
     }
 
-    public async getItems(pageNumber: number, pageSize: number, search?: string, onlyPendingMediaItem?: boolean): Promise<PagedRespone<MediaSource>> {
+    public async getItems(pageNumber: number, pageSize: number, search?: string, onlyPendingMediaItem?: boolean, parsedTitle?: string): Promise<PagedRespone<MediaSource>> {
         const query: any = {};
         if (search) {
             query['renderedTitle'] = new RegExp(search, 'i');
+        }
+        if (parsedTitle) {
+            query['parserInfo.title'] = parsedTitle;
         }
         if (onlyPendingMediaItem) {
             query['mediaItemId'] = null;
