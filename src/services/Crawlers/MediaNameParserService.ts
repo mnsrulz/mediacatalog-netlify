@@ -9,9 +9,12 @@ export class MediaNameParserService {
                     return parsedAsMovie;
                 } else {
                     const parsedAsTv = parser.filenameParse(title, true);
-                    return parsedAsTv;
+                    if (parsedAsTv.title) {
+                        return parsedAsTv;
+                    }
+                    return parsedAsMovie;
                 }
-            }                
+            }
         } catch (error) {
             console.log('Error while parsing the media name: ', title);
         }
