@@ -196,6 +196,8 @@ export class PlaylistMediaItemService {
       throw new ValidationException("Only IMDB External Provider is supported now.");
     }
 
+    if(!extId.id) throw new ValidationException("External Id must not be empty");
+
     let searchDelegate: any = {};
     searchDelegate[`${extId.type}Id`] = extId.id;
 

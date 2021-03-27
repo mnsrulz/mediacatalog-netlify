@@ -2,12 +2,13 @@ import configs from "../configs/config";
 const apiKey = configs.tmdbApiSecret;
 import got from "got";
 import { MediaItem } from "../models/MediaItem";
+import { ValidationException } from "../exceptions/exceptions";
 
 const tmdbApiUrl = "https://api.themoviedb.org/3";
 
 export class TmdbWrapperService {
 
-  public async getByImdbId(external_id: any): Promise<MediaItem | null> {
+  public async getByImdbId(external_id: any): Promise<MediaItem> {
     const findUrl =
       `${tmdbApiUrl}/find/${external_id}?api_key=${apiKey}&language=en-US&external_source=imdb_id`;
     const body: any = await got(findUrl, {
@@ -22,7 +23,7 @@ export class TmdbWrapperService {
     } else if (body.tv_results[0]?.id) {
       itemToReturn = await this.getByTmdbId(result.id, 'tv');
     } else {
-      return null;
+      throw new ValidationException('Unable to get media information of external Id');
     }
     itemToReturn.imdbId = external_id;
     return itemToReturn;
