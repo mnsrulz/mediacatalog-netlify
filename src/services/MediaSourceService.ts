@@ -62,8 +62,8 @@ export class MediaSourceService {
             query['mediaItemId'] = null;
         }
         const skip = (pageNumber - 1) * pageSize;
-        const total = await MediaSourceDataService.find(query).estimatedDocumentCount();
-        const items = await MediaSourceDataService.find(query).sort({ '_id': -1 }).skip(skip).limit(pageSize);
+        const total = await MediaSourceDataService.countDocuments(query);
+        const items = await MediaSourceDataService.find(query).sort({ 'modified': -1 }).skip(skip).limit(pageSize);
         const itemsArray = items && items.map((x: any) =>
             x.toObject({
                 transform: _transformer,
