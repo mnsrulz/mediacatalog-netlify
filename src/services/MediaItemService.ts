@@ -10,7 +10,7 @@ import { TmdbWrapperService } from "./TmdbWrapperService";
 
 const _tmdbWrapperService = new TmdbWrapperService();
 
-export const MediaItemDataService = mongoose.model("MediaItemSchema", MediaItemSchema);
+export const MediaItemDataService = mongoose.model<MediaItem>("MediaItemSchema", MediaItemSchema);
 
 
 const playlistItemTransformer = (doc: any, ret: any) => {
@@ -47,12 +47,12 @@ export class PlaylistMediaItemService {
       }) as MediaItem
     );
   }
-  public async getPlaylistItems(playlistId?: String): Promise<MediaItem[]> {
+  public async getPlaylistItems(playlistId: String): Promise<MediaItem[]> {
     const query: any = {};
     if (playlistId) {
-      query["playlistIds"] = { "$in": [playlistId] };
+      query["playlistIds"] = { $elemMatch: { "playlistId": playlistId } };
       var playlists = await MediaItemDataService.find(query);
-      return playlists && playlists.map((x: any) =>
+      return playlists && playlists.map(x =>
         x.toObject({
           transform: playlistItemTransformer
         }) as MediaItem
@@ -60,7 +60,6 @@ export class PlaylistMediaItemService {
     } else {
       throw new ValidationException('Playlist id is required');
     }
-
   }
 
   public async addMediaItem(item: MediaItem): Promise<String> {
@@ -84,19 +83,16 @@ export class PlaylistMediaItemService {
 
   public async addMediaItemToPlaylist(
     mediaId: any,
-    playlistId: any,
+    playlistId: any
   ): Promise<void> {
     const doc: any = await MediaItemDataService.findById(mediaId);
     if (doc) {
-      if (doc.playlistIds.includes(playlistId)) {
+      if (doc.playlistIds.map((x: any) => x.playlistId).includes(playlistId)) {
         console.log("Item already exists in the playlist");
       } else {
-        console.log("media to modify...", doc);
-        await MediaItemDataService.updateOne({ _id: doc._id }, {
-          $push: {
-            playlistIds: playlistId,
-          },
-        });
+        await MediaItemDataService.findByIdAndUpdate(doc._id, {
+          $push: { "playlistIds": { "playlistId": playlistId, rank: 'defaultrank' } },
+        }, { useFindAndModify: false });
       }
     } else {
       throw new NotFoundException(mediaId);
@@ -104,19 +100,17 @@ export class PlaylistMediaItemService {
   }
 
   public async removeMediaItemFromPlaylist(
-    mediaId: any,
-    playlistId: any,
+    mediaId: string,
+    playlistId: string,
   ): Promise<void> {
-    const doc: any = await MediaItemDataService.findById(mediaId);
+    const doc = await MediaItemDataService.findById(mediaId);
     if (doc) {
-      if (doc.playlistIds.includes(playlistId)) {
-        await MediaItemDataService.updateOne({ _id: doc._id }, {
-          $pull: {
-            playlistIds: playlistId,
-          },
-        });
+      if (doc.playlistIds.some(x => x.playlistId === playlistId)) {
+        await MediaItemDataService.findByIdAndUpdate(doc._id, {
+          $pull: { playlistIds: { playlistId } },
+        }, { useFindAndModify: false });
       } else {
-        console.log("Item does not exists in the playlist");
+        throw new ValidationException('Media item is not associated Playlist');
       }
     } else {
       throw new NotFoundException(mediaId);
@@ -211,16 +205,16 @@ export class PlaylistMediaItemService {
     var mediaItem = await MediaItemDataService.findOne(
       searchDelegate
     );
-    
+
     if (mediaItem) {
       throw new ValidationException("External Id already present.");
     }
     let itemToAdd;
     if (extId.type === 'imdb') {
       itemToAdd = await _tmdbWrapperService.getByImdbId(extId.id);
-    } else {      
-      itemToAdd = await _tmdbWrapperService.getByTmdbId(extId.id, extId.tmdbHint);      
-    }    
+    } else {
+      itemToAdd = await _tmdbWrapperService.getByTmdbId(extId.id, extId.tmdbHint);
+    }
     const createdDocument = await MediaItemDataService.create(itemToAdd);
     return createdDocument._id;
   }

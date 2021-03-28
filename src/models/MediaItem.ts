@@ -1,10 +1,14 @@
+import { Document } from 'mongoose';
 
-export interface MediaItem {
+export interface MediaItem extends Document {
   id: string;
   itemType: string;
   title: string;
   year: string;
-  playlistIds: string[];
+  playlistIds: {    
+    playlistId: string,
+    rank: string
+  }[];
   backdropPath: string;
   posterPath: string;
   tagline: string;

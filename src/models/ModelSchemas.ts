@@ -14,9 +14,7 @@ export const MediaItemSchema = new Schema({
   title: String,
   year: Number,
   itemType: String,
-  playlistIds: [{
-    type: String,
-  }],
+  playlistIds: [{ _id: false, playlistId: String, rank: String }],  //setting _id to false to avoid creation of that in db
   favorite: {
     type: Boolean,
     default: false
@@ -47,7 +45,7 @@ export const RemoteUrlUploadRequestSchema = new Schema({
 
 export const CrawlerConfig = new Schema({
   name: String,
-  internalType: String  
+  internalType: String
 })
 
 export const MediaSourceSchema = new Schema({

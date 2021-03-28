@@ -12,7 +12,7 @@ export class PlaylistMediaItemsController {
   public async addMediaItemToPlaylist(req: Request, res: Response) {    
     await _playlistMediaItemService.addMediaItemToPlaylist(
       req.params.mediaItemId,
-      req.params.playlistId,
+      req.params.playlistId      
     );
     res.sendStatus(200);
   }
