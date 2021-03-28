@@ -87,6 +87,48 @@ paths:
       responses:
         "404":
           description: "Playlist not found"
+  /playlists/hdhub/items:
+    get:
+      tags:
+        - "Playlist Media Items"
+      parameters:
+        - name: "pageSize"
+          in: "query"
+          schema:
+            type: "number"
+      summary: "List items in the playlist"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Playlist"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Playlist not found"
+  /playlists/extramovies/items:
+    get:
+      tags:
+        - "Playlist Media Items"
+      parameters:
+        - name: "pageSize"
+          in: "query"
+          schema:
+            type: "number"            
+      summary: "List items in the playlist"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Playlist"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Playlist not found"
   /playlists/{playlistId}/items:
     get:
       tags:
