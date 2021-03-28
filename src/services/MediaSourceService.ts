@@ -2,10 +2,13 @@ import * as mongoose from "mongoose";
 import { MediaSource } from "../models/MediaSource";
 import { PagedRespone } from "../models/PagedRespone";
 import { MediaSourceSchema } from "../models/ModelSchemas";
-import { NotFoundException } from "../exceptions/exceptions";
+import { NotFoundException, ValidationException } from "../exceptions/exceptions";
 import { MediaNameParserService } from "./Crawlers/MediaNameParserService";
+import { ExternalId } from "../models/ExternalId";
+import { PlaylistMediaItemService } from "../services/MediaItemService";
 export const MediaSourceDataService = mongoose.model("MediaSourceSchema", MediaSourceSchema);
 const _mediaNameParserService = new MediaNameParserService();
+const _playlistMediaItemService = new PlaylistMediaItemService();
 
 const _transformer = (doc: any, ret: any) => {
     ret.id = ret._id;
@@ -68,6 +71,7 @@ export class MediaSourceService {
     public async attachMediaItem(mediaSourceId: string, mediaItemId: string): Promise<void> {
         const doc: any = await MediaSourceDataService.findById(mediaSourceId);
         if (doc) {
+            if(doc.mediaItemId) throw new ValidationException("Media Item already attached to this.");
             const propToUpdate: any = {};
             propToUpdate[`mediaItemId`] = mediaItemId;
             await MediaSourceDataService.updateOne({ _id: doc._id }, propToUpdate);
@@ -85,5 +89,20 @@ export class MediaSourceService {
         } else {
             throw new NotFoundException(mediaSourceId);
         }
+    }
+
+    public async attachByExternalId(mediaSourceId: string, extId: ExternalId): Promise<void> {
+        let mediaItemId;
+        try {
+            const { id } = await _playlistMediaItemService.getByExternalId(extId);
+            mediaItemId = id;
+        } catch (err) {
+            if (err instanceof NotFoundException) {                
+                mediaItemId = await _playlistMediaItemService.createMediaByExternalId(extId);
+            } else {
+                throw err;
+            }
+        }
+        await this.attachMediaItem(mediaSourceId, mediaItemId);
     }
 }

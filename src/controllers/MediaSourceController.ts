@@ -3,7 +3,7 @@ import { MediaSourceService } from "../services/MediaSourceService";
 const _mediaSourceService = new MediaSourceService();
 
 export class MediaSourceController {
-  public async list(req: Request, res: Response) {    
+  public async list(req: Request, res: Response) {
     const pageSize = parseInt(req.query.pageSize as string) || 20;
     const pageNumber = parseInt(req.query.pageNumber as string) || 1;
     const onlyPendingMediaAssignment = (req.query.onlyPendingMediaAssignment as string)?.toLowerCase() === 'true';
@@ -20,5 +20,13 @@ export class MediaSourceController {
     await _mediaSourceService.detachMediaItem(req.params.mediaSourceId, req.params.mediaItemId);
     res.status(200).send();
   }
-  
+
+  public async attachByExternalId(req: Request, res: Response) {
+    await _mediaSourceService.attachByExternalId(req.params.mediaSourceId, {
+      id: req.params.externalId,
+      type: req.query['type'] as string
+    });
+    res.status(200).send();
+  }
+
 }

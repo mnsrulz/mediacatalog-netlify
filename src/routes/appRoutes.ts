@@ -60,6 +60,8 @@ export class ApplicationRoutes {
 
     this.router.route("/mediasources").get(asyncHandler(this.mediaSourceController.list));
     this.router.route("/mediasources/:mediaSourceId/mediaItemId/:mediaItemId").put(asyncHandler(this.mediaSourceController.attachMediaItem));
+    this.router.route("/mediasources/:mediaSourceId/byExternalId/:externalId").put(asyncHandler(this.mediaSourceController.attachByExternalId));
+    
     this.router.route("/mediasources/:mediaSourceId/mediaItemId/:mediaItemId").delete(asyncHandler(this.mediaSourceController.detachMediaItem));
   }
 
