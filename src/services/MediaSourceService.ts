@@ -18,6 +18,16 @@ const _transformer = (doc: any, ret: any) => {
 };
 
 export class MediaSourceService {
+    public async getById(id: string): Promise<MediaSource> {
+        const latestMediaSource = await MediaSourceDataService.findById(id);
+        if (latestMediaSource) {
+            return latestMediaSource.toObject({
+                transform: _transformer,
+            }) as MediaSource;
+        }
+        throw new NotFoundException(id);
+    }
+
     public async findLastModifiedMediaSource(crawlerType: 'hdhub' | 'extramovies'): Promise<MediaSource | null> {
         const latestMediaSource = await MediaSourceDataService.findOne({
             crawlerType: crawlerType
@@ -71,7 +81,7 @@ export class MediaSourceService {
     public async attachMediaItem(mediaSourceId: string, mediaItemId: string): Promise<void> {
         const doc: any = await MediaSourceDataService.findById(mediaSourceId);
         if (doc) {
-            if(doc.mediaItemId) throw new ValidationException("Media Item already attached to this.");
+            if (doc.mediaItemId) throw new ValidationException("Media Item already attached to this.");
             const propToUpdate: any = {};
             propToUpdate[`mediaItemId`] = mediaItemId;
             await MediaSourceDataService.updateOne({ _id: doc._id }, propToUpdate);
@@ -97,7 +107,7 @@ export class MediaSourceService {
             const { id } = await _playlistMediaItemService.getByExternalId(extId);
             mediaItemId = id;
         } catch (err) {
-            if (err instanceof NotFoundException) {                
+            if (err instanceof NotFoundException) {
                 mediaItemId = await _playlistMediaItemService.createMediaByExternalId(extId);
             } else {
                 throw err;

@@ -3,6 +3,11 @@ import { MediaSourceService } from "../services/MediaSourceService";
 const _mediaSourceService = new MediaSourceService();
 
 export class MediaSourceController {
+  public async get(req: Request, res: Response) {
+    const item = await _mediaSourceService.getById(req.params.mediaSourceId);
+    res.json(item);
+  }
+
   public async list(req: Request, res: Response) {
     const pageSize = parseInt(req.query.pageSize as string) || 20;
     const pageNumber = parseInt(req.query.pageNumber as string) || 1;

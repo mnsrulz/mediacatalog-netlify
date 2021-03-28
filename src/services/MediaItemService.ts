@@ -23,13 +23,13 @@ const playlistItemTransformer = (doc: any, ret: any) => {
 const knownExternalIdProviders = ["imdb", "tvdb", "tmdb"];
 export class PlaylistMediaItemService {
   public async get(mediaItemId: any) {
-    var playlist = await MediaItemDataService.findById(mediaItemId);
-    if (playlist) {
-      return playlist.toObject({
+    var mediaItem = await MediaItemDataService.findById(mediaItemId);
+    if (mediaItem) {
+      return mediaItem.toObject({
         transform: playlistItemTransformer,
       });
     }
-    return null;
+    throw new NotFoundException(mediaItemId);
   }
   public async getItems(type?: string, search?: string): Promise<MediaItem[]> {
     const query: any = {};

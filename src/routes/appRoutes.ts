@@ -58,6 +58,7 @@ export class ApplicationRoutes {
     this.router.route("/crawler/extramovies").get(asyncHandler(this.crawlerController.fetchLatestExtramovies));
     this.router.route("/crawler/extramovies").post(asyncHandler(this.crawlerController.crawlExtramovies));
 
+    this.router.route("/mediasources/:mediaSourceId").get(asyncHandler(this.mediaSourceController.get));
     this.router.route("/mediasources").get(asyncHandler(this.mediaSourceController.list));
     this.router.route("/mediasources/:mediaSourceId/mediaItemId/:mediaItemId").put(asyncHandler(this.mediaSourceController.attachMediaItem));
     this.router.route("/mediasources/:mediaSourceId/byExternalId/:externalId").put(asyncHandler(this.mediaSourceController.attachByExternalId));

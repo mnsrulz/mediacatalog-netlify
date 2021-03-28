@@ -1,4 +1,5 @@
 import * as mongoose from "mongoose";
+import { NotFoundException } from "../exceptions/exceptions";
 
 import { PlaylistSchema } from "../models/ModelSchemas";
 import { Playlist } from "../models/PlaylistItem";
@@ -23,14 +24,14 @@ export class PlaylistService {
     );
   }
 
-  public async getById(id:String): Promise<Playlist | null> {
+  public async getById(id:string): Promise<Playlist | null> {
     var playlist: any = await PlaylistDataService.findById(id);
     if (playlist) {
       return playlist.toObject({
         transform: playlistTransformer,
       });
     }
-    return null;
+    throw new NotFoundException(id);
   }
 
   public async addPlaylist(item: Playlist): Promise<String> {
