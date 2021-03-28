@@ -44,16 +44,24 @@ export class PlaylistMediaItemService {
       }) as MediaItem
     );
   }
-  public async getPlaylistItems(playlistId: String): Promise<MediaItem[]> {
+  public async getPlaylistItems(playlistId: String): Promise<PagedRespone<MediaItem>> {
     const query: any = {};
     if (playlistId) {
       query["playlistIds"] = { $elemMatch: { "playlistId": playlistId } };
       var playlists = await MediaItemDataService.find(query).limit(100);
-      return playlists && playlists.map(x =>
+      const items = playlists && playlists.map(x =>
         x.toObject({
           transform: playlistItemTransformer
         }) as MediaItem
       );
+      
+      return {
+        items,
+        total: 0,
+        count: items.length,
+        pageNumber: 1,
+        pageSize: 0
+      }
     } else {
       throw new ValidationException('Playlist id is required');
     }
