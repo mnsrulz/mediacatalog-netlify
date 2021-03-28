@@ -30,11 +30,11 @@ export class TmdbWrapperService {
   }
 
   public async getByTmdbId(id: any, type: string): Promise<MediaItem> {
-    const tmdbByIdUrl = `https://api.themoviedb.org/3/${type}/${id}?&api_key=${apiKey}`;
+    const tmdbByIdUrl = `https://api.themoviedb.org/3/${type}/${id}?&api_key=${apiKey}&append_to_response=external_ids`;    
     const result: any = await got(tmdbByIdUrl, {
       responseType: "json",
       resolveBodyOnly: true
-    });
+    });   
 
     const playlistItem = {
       title: result.title || result.name,
@@ -45,7 +45,8 @@ export class TmdbWrapperService {
       backdropPath: result.backdrop_path,
       overview: result.overview,
       tmdbId: id,
-      itemType: type
+      itemType: type,
+      imdbId: result.external_ids?.imdb_id
     } as MediaItem;
     return playlistItem;
   }

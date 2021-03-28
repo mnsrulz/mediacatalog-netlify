@@ -29,7 +29,8 @@ export class MediaSourceController {
   public async attachByExternalId(req: Request, res: Response) {
     await _mediaSourceService.attachByExternalId(req.params.mediaSourceId, {
       id: req.params.externalId,
-      type: req.query['type'] as string
+      type: req.query['type'] as string,      
+      tmdbHint: req.query['tmdbHint'] as string
     });
     res.status(200).send();
   }

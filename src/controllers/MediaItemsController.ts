@@ -26,7 +26,8 @@ export class MediaItemsController {
   public async attachExternalIdToMediaItem(req: Request, res: Response) {
     await _playlistMediaItemService.attachExternalIdToMediaItem(req.params.mediaItemId, {
       id: req.params.externalId,
-      type: req.query['type'] as string
+      type: req.query['type'] as string,
+      tmdbHint: req.query['tmdbHint'] as string
     });
     res.status(200).send();
   }
@@ -39,7 +40,8 @@ export class MediaItemsController {
   public async getByExternalId(req: Request, res: Response) {
     const item = await _playlistMediaItemService.getByExternalId({
       id: req.params.externalId,
-      type: req.query['type'] as string
+      type: req.query['type'] as string,
+      tmdbHint: req.query['tmdbHint'] as string
     });
     res.json(item);
   }
@@ -48,7 +50,8 @@ export class MediaItemsController {
   public async createMediaItemByExternalId(req: Request, res: Response) {
     const id = await _playlistMediaItemService.createMediaByExternalId({
       id: req.params.externalId,
-      type: req.query['type'] as string
+      type: req.query['type'] as string,
+      tmdbHint: req.query['tmdbHint'] as string
     });
     res.status(201).send({ id });
   }

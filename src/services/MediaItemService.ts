@@ -192,23 +192,35 @@ export class PlaylistMediaItemService {
     const isKnownExternalProvider = knownExternalIdProviders.includes(extId.type);
     if (!isKnownExternalProvider) {
       throw new ValidationException("Invalid External Provider");
-    } else if (extId.type != 'imdb') {
-      throw new ValidationException("Only IMDB External Provider is supported now.");
+    } else if (extId.type === 'imdb') {
+      //pass
+    } else if (extId.type === 'tmdb' && ['movie', 'tv'].includes(extId.tmdbHint)) {
+      //pass
+    } else {
+      throw new ValidationException('Error in parsing External Provider');
     }
 
-    if(!extId.id) throw new ValidationException("External Id must not be empty");
+    if (!extId.id) throw new ValidationException("External Id must not be empty");
 
     let searchDelegate: any = {};
     searchDelegate[`${extId.type}Id`] = extId.id;
+    if (extId.type === 'tmdb') {
+      searchDelegate[`type`] = extId.tmdbHint;
+    }
 
     var mediaItem = await MediaItemDataService.findOne(
       searchDelegate
     );
-
+    
     if (mediaItem) {
       throw new ValidationException("External Id already present.");
     }
-    const itemToAdd = await _tmdbWrapperService.getByImdbId(extId.id);
+    let itemToAdd;
+    if (extId.type === 'imdb') {
+      itemToAdd = await _tmdbWrapperService.getByImdbId(extId.id);
+    } else {      
+      itemToAdd = await _tmdbWrapperService.getByTmdbId(extId.id, extId.tmdbHint);      
+    }    
     const createdDocument = await MediaItemDataService.create(itemToAdd);
     return createdDocument._id;
   }
