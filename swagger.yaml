@@ -242,6 +242,26 @@ paths:
           description: "successful operation"
         "404":
           description: "Media Item Id not found"
+  /items/{mediaItemId}/mediasources:
+    get:
+      tags:
+        - "Media Source"
+        - "mediaitems"
+      summary: "Retrieves media sources of given media item"
+      parameters:
+        - name: "mediaItemId"
+          in: "path"
+          description: "ID of media item"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: object
   /items/{mediaItemId}/favorite:
     put:
       tags:
@@ -418,6 +438,13 @@ paths:
               - "imdb"
               - "tvdb"
               - "tmdb"
+        - name: "tmdbHint"
+          in: "query"
+          schema:
+            type: "string"
+            enum:
+              - "movie"
+              - "tv"
       responses:
         "201":
           description: "successful operation"

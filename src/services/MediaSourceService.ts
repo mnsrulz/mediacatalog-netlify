@@ -78,6 +78,20 @@ export class MediaSourceService {
         } as PagedRespone<MediaSource>
     }
 
+    public async getItemsByMediaItemId(mediaItemId: string): Promise<MediaSource[]> {
+        if (!mediaItemId) throw new ValidationException("media item id must not be empty");
+        const query = {
+            mediaItemId
+        };
+        const items = await MediaSourceDataService.find(query);
+        const itemsArray = items && items.map((x: any) =>
+            x.toObject({
+                transform: _transformer,
+            }) as MediaSource
+        );
+        return itemsArray;
+    }
+
     public async attachMediaItem(mediaSourceId: string, mediaItemId: string): Promise<void> {
         const doc: any = await MediaSourceDataService.findById(mediaSourceId);
         if (doc) {

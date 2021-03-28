@@ -40,6 +40,8 @@ export class ApplicationRoutes {
     this.router.route("/items/:mediaItemId").get(asyncHandler(this.mediaItemsController.get));
     this.router.route("/items/:mediaItemId").delete(asyncHandler(this.mediaItemsController.deleteMediaItem));
 
+    this.router.route("/items/:mediaItemId/mediasources").get(asyncHandler(this.mediaSourceController.getByMediaItemId));    
+
     this.router.route("/items/:mediaItemId/favorite").put(asyncHandler(this.mediaItemsController.markItemAsFavorite));
     this.router.route("/items/:mediaItemId/favorite").delete(asyncHandler(this.mediaItemsController.unFavoriteItem));
 

@@ -15,6 +15,11 @@ export class MediaSourceController {
     const items = await _mediaSourceService.getItems(pageNumber, pageSize, req.query.q as string, onlyPendingMediaAssignment, req.query.parsedTitle as string)
     res.json(items);
   }
+  
+  public async getByMediaItemId(req: Request, res: Response) {
+    const items = await _mediaSourceService.getItemsByMediaItemId(req.params.mediaItemId);
+    res.json(items);
+  }
 
   public async attachMediaItem(req: Request, res: Response) {
     await _mediaSourceService.attachMediaItem(req.params.mediaSourceId, req.params.mediaItemId);
