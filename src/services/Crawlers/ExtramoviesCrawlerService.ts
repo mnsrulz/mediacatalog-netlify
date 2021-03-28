@@ -20,8 +20,8 @@ export class ExtramoviesCrawlerService {
         responseData.forEach(x => {
             const source = {
                 crawlerType: "extramovies",
-                created: new Date(x.date),
-                modified: new Date(x.modified),
+                created: new Date(x.date_gmt),
+                modified: new Date(x.modified_gmt),
                 renderedContent: x.content.rendered,
                 renderedTitle: x.title.rendered,
                 slug: x.slug,

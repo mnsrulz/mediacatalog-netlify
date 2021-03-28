@@ -11,7 +11,9 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\server-local.js"
+            "program": "${workspaceFolder}\\server-local.js",
+            "preLaunchTask": "npm: compile"
+            
         }
     ]
 }
