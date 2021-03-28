@@ -8,6 +8,16 @@ export class PlaylistMediaItemsController {
     );
     res.json(items);
   }
+  
+  public async listExtraMoviesItems(req: Request, res: Response) {
+    const items = await _playlistMediaItemService.getSpecializedCrawlerTypeItems('extramovies', parseInt(req.query.pageSize as string || '50'));
+    res.json(items);
+  }
+  
+  public async listHdhubItems(req: Request, res: Response) {
+    const items = await _playlistMediaItemService.getSpecializedCrawlerTypeItems('hdhub', parseInt(req.query.pageSize as string || '50'));
+    res.json(items);
+  }
 
   public async addMediaItemToPlaylist(req: Request, res: Response) {    
     await _playlistMediaItemService.addMediaItemToPlaylist(

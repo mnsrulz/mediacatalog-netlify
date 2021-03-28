@@ -31,6 +31,8 @@ export class ApplicationRoutes {
     this.router.route("/playlists/:playlistId").get(asyncHandler(this.playlistController.get));
     this.router.route("/playlists").post(asyncHandler(this.playlistController.create));
 
+    this.router.route("/playlists/hdhub/items").get(asyncHandler(this.playlistMediaItemsController.listHdhubItems));
+    this.router.route("/playlists/extramovies/items").get(asyncHandler(this.playlistMediaItemsController.listExtraMoviesItems));
     this.router.route("/playlists/:playlistId/items").get(asyncHandler(this.playlistMediaItemsController.list));
     this.router.route(["/playlists/:playlistId/items/:mediaItemId", "/items/:mediaItemId/playlists/:playlistId"]).put(asyncHandler(this.playlistMediaItemsController.addMediaItemToPlaylist));
     this.router.route(["/playlists/:playlistId/items/:mediaItemId", "/items/:mediaItemId/playlists/:playlistId"]).delete(asyncHandler(this.playlistMediaItemsController.removeMediaItemFromPlaylist));

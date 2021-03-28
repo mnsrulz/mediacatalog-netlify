@@ -1,20 +1,17 @@
-import * as mongoose from "mongoose";
 import {
   NotFoundException,
   ValidationException,
 } from "../exceptions/exceptions";
-import { MediaItemSchema } from "../models/ModelSchemas";
 import { ExternalId } from "../models/ExternalId";
 import { MediaItem } from "../models/MediaItem";
 import { TmdbWrapperService } from "./TmdbWrapperService";
+import { MediaItemDataService, MediaSourceDataService } from "./DataServices";
+import { PagedRespone } from "../models/PagedRespone";
 
 const _tmdbWrapperService = new TmdbWrapperService();
 
-export const MediaItemDataService = mongoose.model<MediaItem>("MediaItemSchema", MediaItemSchema);
-
-
 const playlistItemTransformer = (doc: any, ret: any) => {
-  ret.id = ret._id;
+  ret.id = ret._id.toString();
   delete ret["_id"];
   delete ret["__v"];
   return ret;
@@ -51,7 +48,7 @@ export class PlaylistMediaItemService {
     const query: any = {};
     if (playlistId) {
       query["playlistIds"] = { $elemMatch: { "playlistId": playlistId } };
-      var playlists = await MediaItemDataService.find(query);
+      var playlists = await MediaItemDataService.find(query).limit(100);
       return playlists && playlists.map(x =>
         x.toObject({
           transform: playlistItemTransformer
@@ -59,6 +56,38 @@ export class PlaylistMediaItemService {
       );
     } else {
       throw new ValidationException('Playlist id is required');
+    }
+  }
+
+  public async getSpecializedCrawlerTypeItems(crawlerType: string, pageSize: number): Promise<PagedRespone<MediaItem>> {
+    if (pageSize > 200) throw new ValidationException('Page size limit is 200 maximum');
+    const sortedMediaItemIds = await MediaSourceDataService.aggregate([
+      { $match: { "crawlerType": crawlerType, "mediaItemId": { $ne: null } } },
+      { $group: { "_id": "$mediaItemId", "lastModified": { $max: "$modified" } } },
+      { $sort: { "lastModified": -1 } },
+      { $limit: pageSize }
+    ]); //known issue page size won't work well with aggregation
+
+    const qualifiedIds = sortedMediaItemIds.map(x => x._id);    
+    const mediaItems = await MediaItemDataService.find({
+      '_id': {
+        $in: qualifiedIds
+      }
+    });
+
+    mediaItems.sort((a, b) => { return qualifiedIds.indexOf(a.id) - qualifiedIds.indexOf(b.id); });
+    const items = mediaItems && mediaItems.map(x =>
+      x.toObject({
+        transform: playlistItemTransformer
+      }) as MediaItem
+    );
+
+    return {
+      items,
+      total: 0,
+      count: items.length,
+      pageNumber: 1,
+      pageSize
     }
   }
 
@@ -82,16 +111,17 @@ export class PlaylistMediaItemService {
   }
 
   public async addMediaItemToPlaylist(
-    mediaId: any,
-    playlistId: any
+    mediaId: string,
+    playlistId: string,
+    rank: string = 'defaultrank'
   ): Promise<void> {
-    const doc: any = await MediaItemDataService.findById(mediaId);
+    const doc = await MediaItemDataService.findById(mediaId);
     if (doc) {
-      if (doc.playlistIds.map((x: any) => x.playlistId).includes(playlistId)) {
-        console.log("Item already exists in the playlist");
+      if (doc.playlistIds.some(x => x.playlistId === playlistId)) {
+        throw new ValidationException("Item already exists in the playlist");
       } else {
         await MediaItemDataService.findByIdAndUpdate(doc._id, {
-          $push: { "playlistIds": { "playlistId": playlistId, rank: 'defaultrank' } },
+          $push: { playlistIds: { playlistId, rank } },
         }, { useFindAndModify: false });
       }
     } else {

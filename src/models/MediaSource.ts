@@ -1,4 +1,5 @@
-export interface MediaSource {
+import { Document } from 'mongoose';
+export interface MediaSource extends Document {
   externalId: string,
   webViewLink: string,
   created: Date,

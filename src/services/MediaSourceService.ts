@@ -1,12 +1,11 @@
-import * as mongoose from "mongoose";
 import { MediaSource } from "../models/MediaSource";
 import { PagedRespone } from "../models/PagedRespone";
-import { MediaSourceSchema } from "../models/ModelSchemas";
 import { NotFoundException, ValidationException } from "../exceptions/exceptions";
 import { MediaNameParserService } from "./Crawlers/MediaNameParserService";
 import { ExternalId } from "../models/ExternalId";
 import { PlaylistMediaItemService } from "../services/MediaItemService";
-export const MediaSourceDataService = mongoose.model("MediaSourceSchema", MediaSourceSchema);
+import { MediaSourceDataService } from "./DataServices";
+
 const _mediaNameParserService = new MediaNameParserService();
 const _playlistMediaItemService = new PlaylistMediaItemService();
 
