@@ -1,5 +1,5 @@
-
-export interface RemoteUrlUploadRequest {
+import { Document } from 'mongoose';
+export interface RemoteUrlUploadRequest extends Document {
   fileUrl: string;
   files: string[];
 }

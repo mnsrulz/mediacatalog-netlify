@@ -5,23 +5,17 @@ import { MediaNameParserService } from "./Crawlers/MediaNameParserService";
 import { ExternalId } from "../models/ExternalId";
 import { PlaylistMediaItemService } from "../services/MediaItemService";
 import { MediaSourceDataService } from "./DataServices";
+import { GenericTransformer } from "../transformers/genericTransformer";
 
 const _mediaNameParserService = new MediaNameParserService();
 const _playlistMediaItemService = new PlaylistMediaItemService();
-
-const _transformer = (doc: any, ret: any) => {
-    ret.id = ret._id;
-    delete ret["_id"];
-    delete ret["__v"];
-    return ret;
-};
 
 export class MediaSourceService {
     public async getById(id: string): Promise<MediaSource> {
         const latestMediaSource = await MediaSourceDataService.findById(id);
         if (latestMediaSource) {
             return latestMediaSource.toObject({
-                transform: _transformer,
+                transform: GenericTransformer,
             }) as MediaSource;
         }
         throw new NotFoundException(id);
@@ -34,7 +28,7 @@ export class MediaSourceService {
 
         if (latestMediaSource) {
             return latestMediaSource.toObject({
-                transform: _transformer,
+                transform: GenericTransformer,
             }) as MediaSource;
         }
         return null;
@@ -65,7 +59,7 @@ export class MediaSourceService {
         const items = await MediaSourceDataService.find(query).sort({ 'modified': -1 }).skip(skip).limit(pageSize);
         const itemsArray = items && items.map((x: any) =>
             x.toObject({
-                transform: _transformer,
+                transform: GenericTransformer,
             }) as MediaSource
         );
         return {
@@ -85,7 +79,7 @@ export class MediaSourceService {
         const items = await MediaSourceDataService.find(query);
         const itemsArray = items && items.map((x: any) =>
             x.toObject({
-                transform: _transformer,
+                transform: GenericTransformer,
             }) as MediaSource
         );
         return itemsArray;

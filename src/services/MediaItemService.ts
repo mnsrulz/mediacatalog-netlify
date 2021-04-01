@@ -8,14 +8,10 @@ import { TmdbWrapperService } from "./TmdbWrapperService";
 import { MediaItemDataService, MediaSourceDataService } from "./DataServices";
 import { PagedRespone } from "../models/PagedRespone";
 
+import { GenericTransformer as playlistItemTransformer } from "../transformers/genericTransformer";
+
 const _tmdbWrapperService = new TmdbWrapperService();
 
-const playlistItemTransformer = (doc: any, ret: any) => {
-  ret.id = ret._id.toString();
-  delete ret["_id"];
-  delete ret["__v"];
-  return ret;
-};
 
 const knownExternalIdProviders = ["imdb", "tvdb", "tmdb"];
 export class PlaylistMediaItemService {
@@ -54,7 +50,7 @@ export class PlaylistMediaItemService {
           transform: playlistItemTransformer
         }) as MediaItem
       );
-      
+
       return {
         items,
         total: 0,
@@ -76,7 +72,7 @@ export class PlaylistMediaItemService {
       { $limit: pageSize }
     ]); //known issue page size won't work well with aggregation
 
-    const qualifiedIds = sortedMediaItemIds.map(x => x._id);    
+    const qualifiedIds = sortedMediaItemIds.map(x => x._id);
     const mediaItems = await MediaItemDataService.find({
       '_id': {
         $in: qualifiedIds

@@ -1,17 +1,7 @@
-import * as mongoose from "mongoose";
 import uniqid from "uniqid";
 import { GetRemoteUrlUploadRequest, RemoteUrlUploadRequest } from "../models/remoteUrlUploadRequest";
-import { RemoteUrlUploadRequestSchema } from "../models/ModelSchemas";
-
-export const RemoteUrlUploadDataService = mongoose.model("RemoteUrlUploadRequestSchema", RemoteUrlUploadRequestSchema);
-
-const _transformer = (doc: any, ret: any) => {
-    ret.id = ret._id;
-    delete ret["_id"];
-    delete ret["__v"];
-    return ret;
-};
-
+import { GenericTransformer as _transformer } from "../transformers/genericTransformer";
+import { RemoteUrlUploadDataService } from "./DataServices";
 
 export class RemoteUrlUploadRequestService {
     public async getItems(status: string | undefined): Promise<GetRemoteUrlUploadRequest[]> {
