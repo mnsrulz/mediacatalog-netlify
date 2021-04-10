@@ -3,14 +3,20 @@ import { Playlist } from "../models/PlaylistItem";
 import { GenericTransformer } from "../transformers/genericTransformer";
 import { PlaylistDataService } from "./DataServices";
 
+const hdhubPlaylist = { title: 'Hdhub', ts: new Date(2021, 1, 1), id: 'hdhub' } as unknown as Playlist
+const extramoviesPlaylist = { title: 'Extramovies', ts: new Date(2021, 1, 1), id: 'extramovies' } as unknown as Playlist
+
+const systemDefinedPlaylist = [hdhubPlaylist, extramoviesPlaylist]
+
 export class PlaylistService {
-  public async getAll(): Promise<Playlist[]> {
+  public async getAll(includeSystemDefined = false): Promise<Playlist[]> {
     var playlists: any[] = await PlaylistDataService.find({});
-    return playlists && playlists.map((x) =>
+    playlists = playlists.map((x) =>
       x.toObject({
         transform: GenericTransformer,
       })
     );
+    return includeSystemDefined ? [...systemDefinedPlaylist, ...playlists] : playlists;
   }
 
   public async getById(id: string): Promise<Playlist | null> {

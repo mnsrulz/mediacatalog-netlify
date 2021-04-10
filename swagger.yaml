@@ -27,6 +27,12 @@ paths:
     get:
       tags:
         - "playlist"
+      parameters:
+        - in: "query"
+          name: "includeSystemDefined"
+          required: false
+          schema:
+            type: boolean
       responses:
         "200":
           description: "successful operation"
