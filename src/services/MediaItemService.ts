@@ -44,8 +44,13 @@ export class PlaylistMediaItemService {
     const query: any = {};
     if (playlistId) {
       query["playlistIds"] = { $elemMatch: { "playlistId": playlistId } };
-      var playlists = await MediaItemDataService.find(query).limit(100);
-      const items = playlists && playlists.map(x =>
+      var playlistItems = await MediaItemDataService.find(query).limit(100);
+      playlistItems.sort((a, b) => {
+        const firstItem = a.playlistIds.find(x => x.playlistId === playlistId)?.rank || '';
+        const secondItem = b.playlistIds.find(x => x.playlistId === playlistId)?.rank || '';
+        return firstItem.localeCompare(secondItem);
+      });
+      const items = playlistItems && playlistItems.map(x =>
         x.toObject({
           transform: playlistItemTransformer
         }) as MediaItem
@@ -116,15 +121,16 @@ export class PlaylistMediaItemService {
 
   public async addMediaItemToPlaylist(
     mediaId: string,
-    playlistId: string,
-    rank: string = 'defaultrank'
+    playlistId: string
   ): Promise<void> {
-    const doc = await MediaItemDataService.findById(mediaId);
-    if (doc) {
-      if (doc.playlistIds.some(x => x.playlistId === playlistId)) {
+    const mediaItem = await MediaItemDataService.findById(mediaId);
+    if (mediaItem) {
+      if (mediaItem.playlistIds.some(x => x.playlistId === playlistId)) {
         throw new ValidationException("Item already exists in the playlist");
       } else {
-        await MediaItemDataService.findByIdAndUpdate(doc._id, {
+        const _baseRank = '55i6j7k8l9mbg0' //(parseInt('abcdefghijklmn', 24)/2).toString(24)
+        const rank = (parseInt(_baseRank, 24) - (new Date().getTime())).toString(24);
+        await MediaItemDataService.findByIdAndUpdate(mediaItem._id, {
           $push: { playlistIds: { playlistId, rank } },
         }, { useFindAndModify: false });
       }

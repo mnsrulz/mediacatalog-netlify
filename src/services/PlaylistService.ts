@@ -13,7 +13,7 @@ export class PlaylistService {
     );
   }
 
-  public async getById(id:string): Promise<Playlist | null> {
+  public async getById(id: string): Promise<Playlist | null> {
     var playlist: any = await PlaylistDataService.findById(id);
     if (playlist) {
       return playlist.toObject({
