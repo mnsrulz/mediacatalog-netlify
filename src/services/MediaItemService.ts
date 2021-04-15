@@ -78,18 +78,7 @@ export class PlaylistMediaItemService {
     ]); //known issue page size won't work well with aggregation
 
     const qualifiedIds = sortedMediaItemIds.map(x => x._id);
-    const mediaItems = await MediaItemDataService.find({
-      '_id': {
-        $in: qualifiedIds
-      }
-    });
-
-    mediaItems.sort((a, b) => { return qualifiedIds.indexOf(a.id) - qualifiedIds.indexOf(b.id); });
-    const items = mediaItems && mediaItems.map(x =>
-      x.toObject({
-        transform: playlistItemTransformer
-      }) as MediaItem
-    );
+    const items = await this.findByIds(qualifiedIds);
 
     return {
       items,
@@ -98,6 +87,49 @@ export class PlaylistMediaItemService {
       pageNumber: 1,
       pageSize
     }
+  }
+
+  private async findByIds(qualifiedIds: any[]): Promise<MediaItem[]> {
+    const mediaItems = await MediaItemDataService.find({
+      '_id': {
+        $in: qualifiedIds
+      }
+    });
+    mediaItems.sort((a, b) => { return qualifiedIds.indexOf(a.id) - qualifiedIds.indexOf(b.id); });
+    const items = mediaItems && mediaItems.map(x =>
+      x.toObject({
+        transform: playlistItemTransformer
+      }) as MediaItem
+    );
+    return items;
+  }
+
+  private async findByTmbdIds(qualifiedIds: any[], type: string): Promise<MediaItem[]> {
+    const mediaItems = await MediaItemDataService.find({
+      "tmdbId": {
+        $in: qualifiedIds
+      },
+      "itemType": type
+    });
+    mediaItems.sort((a, b) => { return qualifiedIds.indexOf(a.tmdbId) - qualifiedIds.indexOf(b.tmdbId); });
+    const items = mediaItems && mediaItems.map(x =>
+      x.toObject({
+        transform: playlistItemTransformer
+      }) as MediaItem
+    );
+    return items;
+  }
+
+  public async listTmdbTrending(type: 'movie' | 'tv'): Promise<PagedRespone<MediaItem>> {
+    const qualifiedIds = await _tmdbWrapperService.getTrending(type);
+    const items = await this.findByTmbdIds(qualifiedIds, type);
+    return {
+      items,
+      total: 0,
+      count: items.length,
+      pageNumber: 1,
+      pageSize: 200
+    };
   }
 
   public async addMediaItem(item: MediaItem): Promise<String> {

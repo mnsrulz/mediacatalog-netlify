@@ -5,8 +5,10 @@ import { PlaylistDataService } from "./DataServices";
 
 const hdhubPlaylist = { title: 'Hdhub', ts: new Date(2021, 1, 1), id: 'hdhub' } as unknown as Playlist
 const extramoviesPlaylist = { title: 'Extramovies', ts: new Date(2021, 1, 1), id: 'extramovies' } as unknown as Playlist
+const trendingMoviesPlaylist = { title: 'Trending Movies', ts: new Date(2021, 1, 1), id: 'trendingMovies' } as unknown as Playlist
+const trendingTvPlaylist = { title: 'Trending TV Shows', ts: new Date(2021, 1, 1), id: 'trendingTv' } as unknown as Playlist
 
-const systemDefinedPlaylist = [hdhubPlaylist, extramoviesPlaylist]
+const systemDefinedPlaylist = [hdhubPlaylist, extramoviesPlaylist, trendingMoviesPlaylist, trendingTvPlaylist]
 
 export class PlaylistService {
   public async getAll(includeSystemDefined = false): Promise<Playlist[]> {

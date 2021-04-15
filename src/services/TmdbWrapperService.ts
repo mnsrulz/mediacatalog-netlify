@@ -30,11 +30,11 @@ export class TmdbWrapperService {
   }
 
   public async getByTmdbId(id: any, type: string): Promise<MediaItem> {
-    const tmdbByIdUrl = `https://api.themoviedb.org/3/${type}/${id}?&api_key=${apiKey}&append_to_response=external_ids`;    
+    const tmdbByIdUrl = `https://api.themoviedb.org/3/${type}/${id}?&api_key=${apiKey}&append_to_response=external_ids`;
     const result: any = await got(tmdbByIdUrl, {
       responseType: "json",
       resolveBodyOnly: true
-    });   
+    });
 
     const playlistItem = {
       title: result.title || result.name,
@@ -50,4 +50,31 @@ export class TmdbWrapperService {
     } as MediaItem;
     return playlistItem;
   }
+
+  public async getTrending(type: 'movie'|'tv'): Promise<string[]> {
+    const tmdbByIdUrl = `https://api.themoviedb.org/3/trending/${type}/week?&api_key=${apiKey}`;
+    const promises = [];
+    for (let pageNo = 1; pageNo <= 10; pageNo++) {
+      const response = got<TmdbTrendingMovieResponse>(`${tmdbByIdUrl}&page=${pageNo}`, {
+        responseType: 'json',
+        resolveBodyOnly: true
+      })
+      promises.push(response);
+    }
+    await Promise.all(promises);
+
+    let items: string[] = [];
+    for (const promise of promises) {
+      const result = await promise;            
+      const resultMapped = result.results.map(({ id }) => id).map(String);
+      items = [...items, ...resultMapped];
+    }
+    return items;
+  }
+}
+
+interface TmdbTrendingMovieResponse {
+  results: {
+    id: string
+  }[]
 }

@@ -18,6 +18,16 @@ export class PlaylistMediaItemsController {
     const items = await _playlistMediaItemService.getSpecializedCrawlerTypeItems('hdhub', parseInt(req.query.pageSize as string || '50'));
     res.json(items);
   }
+  
+  public async listTrendingMovies(req: Request, res: Response) {    
+    const items = await _playlistMediaItemService.listTmdbTrending("movie");    
+    res.json(items);
+  }
+
+  public async listTrendingTv(req: Request, res: Response) {    
+    const items = await _playlistMediaItemService.listTmdbTrending("tv");    
+    res.json(items);
+  }
 
   public async addMediaItemToPlaylist(req: Request, res: Response) {    
     await _playlistMediaItemService.addMediaItemToPlaylist(
