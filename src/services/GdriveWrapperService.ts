@@ -10,6 +10,10 @@ export class GdriveWrapperService {
             json: {
                 name: fileName,
                 parents: [rootId]
+            },
+            retry: {
+                limit: 3,
+                methods: ['POST']
             }
         });
         if (response.headers['location']) return response.headers['location'];
@@ -20,7 +24,7 @@ export class GdriveWrapperService {
         const existingFolder = await getFolderIdIfExists(rootId, accessToken, folderName);
         if (existingFolder) return existingFolder;
 
-        const response = await got.post('https://www.googleapis.com/drive/v3/files', {
+        const response = await got.post<{ id: string }>('https://www.googleapis.com/drive/v3/files', {
             searchParams: {
                 supportsAllDrives: true
             },
@@ -31,9 +35,11 @@ export class GdriveWrapperService {
                 name: folderName,
                 parents: [rootId],
                 mimeType: 'application/vnd.google-apps.folder'
-            }
+            },
+            responseType: 'json',
+            resolveBodyOnly: true
         });
-        if (response.headers['location']) return response.headers['location'];
+        if (response.id) return response.id;
         throw new Error('Unable to create file');
     }
 }
