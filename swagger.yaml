@@ -522,6 +522,11 @@ paths:
               - "running"
               - "completed"
               - "error"
+        - name: "requestId"
+          description: "Pass in the request id"
+          in: "query"
+          schema:
+            type: "string"
       responses:
         "200":
           description: "successful operation"
@@ -806,6 +811,16 @@ components:
       type: "object"
       properties:
         fileUrl:
+          type: "string"
+        accessToken:
+          type: "string"
+        parentUrl:
+          type: "string"
+        title:
+          type: "string"
+        year:
+          type: "string"
+        mediaType:
           type: "string"
         files:
           type: "array"
