@@ -8,7 +8,7 @@ const extramoviesPlaylist = { title: 'Extramovies', ts: new Date(2021, 1, 1), id
 const trendingMoviesPlaylist = { title: 'Trending Movies', ts: new Date(2021, 1, 1), id: 'trendingMovies' } as unknown as Playlist
 const trendingTvPlaylist = { title: 'Trending TV Shows', ts: new Date(2021, 1, 1), id: 'trendingTv' } as unknown as Playlist
 
-const systemDefinedPlaylist = [hdhubPlaylist, extramoviesPlaylist, trendingMoviesPlaylist, trendingTvPlaylist]
+const systemDefinedPlaylists = [hdhubPlaylist, extramoviesPlaylist, trendingMoviesPlaylist, trendingTvPlaylist]
 
 export class PlaylistService {
   public async getAll(includeSystemDefined = false): Promise<Playlist[]> {
@@ -18,11 +18,14 @@ export class PlaylistService {
         transform: GenericTransformer,
       })
     );
-    return includeSystemDefined ? [...systemDefinedPlaylist, ...playlists] : playlists;
+    return includeSystemDefined ? [...systemDefinedPlaylists, ...playlists] : playlists;
   }
 
   public async getById(id: string): Promise<Playlist | null> {
+    const systemDefinedPlaylist = systemDefinedPlaylists.find(x => x.id === id);
+    if (systemDefinedPlaylist) return systemDefinedPlaylist;
     var playlist: any = await PlaylistDataService.findById(id);
+    console.log(id, playlist);
     if (playlist) {
       return playlist.toObject({
         transform: GenericTransformer,

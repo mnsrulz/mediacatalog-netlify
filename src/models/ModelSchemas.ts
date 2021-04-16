@@ -40,7 +40,13 @@ export const RemoteUrlUploadRequestSchema = new Schema({
   },
   sequence: Number,
   status: String,
-  message: String
+  message: String,
+  parentUrl: String,
+  remoteUrl: String,
+  progress: {
+    size: Number,
+    uploaded: Number
+  }
 }, { collection: "remoteUrlUploadRequest" });
 
 export const CrawlerConfig = new Schema({

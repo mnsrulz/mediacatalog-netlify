@@ -522,6 +522,11 @@ paths:
               - "running"
               - "completed"
               - "error"
+        - name: "requestId"
+          description: "Pass in the request id"
+          in: "query"
+          schema:
+            type: "string"
       responses:
         "200":
           description: "successful operation"
@@ -554,6 +559,98 @@ paths:
                     description: "Id of the created media item"
         "405":
           description: "Invalid input"
+  /remoteUrlUploadRequest/{remoteUploadRequestId}:
+    parameters:
+      - in: "path"
+        name: "remoteUploadRequestId"
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - "Remote Url Upload"
+      summary: "Get specific request"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                  $ref: "#/components/schemas/RemoteUrlRequest"
+  /remoteUrlUploadRequest/{remoteUploadRequestId}/start:
+      parameters:
+      - in: "path"
+        name: "remoteUploadRequestId"
+        required: true
+        schema:
+          type: string
+      post:
+        tags:
+          - "Remote Url Upload"
+        summary: "Create a new remote url upload request"
+        responses:
+          "204":
+            description: "successful operation"
+  /remoteUrlUploadRequest/{remoteUploadRequestId}/complete:
+      parameters:
+      - in: "path"
+        name: "remoteUploadRequestId"
+        required: true
+        schema:
+          type: string
+      post:
+        tags:
+          - "Remote Url Upload"
+        summary: "Create a new remote url upload request"
+        responses:
+          "204":
+            description: "successful operation"
+  /remoteUrlUploadRequest/{remoteUploadRequestId}/error:
+      parameters:
+      - in: "path"
+        name: "remoteUploadRequestId"
+        required: true
+        schema:
+          type: string
+      post:
+        tags:
+          - "Remote Url Upload"
+        summary: "Create a new remote url upload request"
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: 
+                    type: string
+        responses:
+          "204":
+            description: "successful operation"
+  /remoteUrlUploadRequest/{remoteUploadRequestId}/progress:
+      parameters:
+      - in: "path"
+        name: "remoteUploadRequestId"
+        required: true
+        schema:
+          type: string
+      post:
+        tags:
+          - "Remote Url Upload"
+        summary: "Create a new remote url upload request"
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  size: 
+                    type: number
+                  uploaded: 
+                    type: number
+        responses:
+          "204":
+            description: "successful operation"
   /crawler/hdhub:
     get:
       tags:
@@ -806,6 +903,16 @@ components:
       type: "object"
       properties:
         fileUrl:
+          type: "string"
+        accessToken:
+          type: "string"
+        parentUrl:
+          type: "string"
+        title:
+          type: "string"
+        year:
+          type: "string"
+        mediaType:
           type: "string"
         files:
           type: "array"
