@@ -4,6 +4,7 @@ import { GenericTransformer as _transformer } from "../transformers/genericTrans
 import { RemoteUrlUploadDataService } from "./DataServices";
 import { GdriveWrapperService } from './GdriveWrapperService';
 import config from '../configs/config';
+import { NotFoundException } from "../exceptions/exceptions";
 
 const _gdriveWrapperService = new GdriveWrapperService();
 
@@ -18,6 +19,45 @@ export class RemoteUrlUploadRequestService {
                 transform: _transformer,
             }) as GetRemoteUrlUploadRequest
         );
+    }
+
+    public async getById(id: string): Promise<GetRemoteUrlUploadRequest | null> {
+        var request: any = await RemoteUrlUploadDataService.findById(id);
+        if (request) {
+            return request.toObject({
+                transform: _transformer,
+            }) as GetRemoteUrlUploadRequest;
+        }
+        throw new NotFoundException(id);
+    }
+
+    public async updateStatus(id: string, status: 'running' | 'completed' | 'error', message: string): Promise<void> {
+        //apply some validations
+        var request: any = await RemoteUrlUploadDataService.findById(id);
+        if (request) {
+            await RemoteUrlUploadDataService.updateOne({ _id: request._id }, {
+                status,
+                message
+            })
+        } else {
+            throw new NotFoundException(id);
+        }
+    }
+
+    public async updateProgress(id: string, payload: { size: number, uploaded: number }): Promise<void> {
+        //apply some validations
+        var request: any = await RemoteUrlUploadDataService.findById(id);
+        const payloadToUpdate = {
+            size: payload.size,
+            uploaded: payload.uploaded
+        }
+        if (request) {
+            await RemoteUrlUploadDataService.updateOne({ _id: request._id }, {
+                progress: payloadToUpdate
+            })
+        } else {
+            throw new NotFoundException(id);
+        }
     }
 
     public async createRequest(uploadRequest: RemoteUrlUploadRequest): Promise<String> {
