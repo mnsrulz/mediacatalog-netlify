@@ -2,6 +2,11 @@ import { Document } from 'mongoose';
 export interface RemoteUrlUploadRequest extends Document {
   fileUrl: string;
   files: string[];
+  parentUrl: string;
+  accessToken: string;
+  mediaType: string;  
+  title: string;
+  year: string;
 }
 
 export interface GetRemoteUrlUploadRequest {
@@ -13,4 +18,5 @@ export interface GetRemoteUrlUploadRequest {
   id: string
   status: string;
   message: string;
+  parentUrl: string;
 }

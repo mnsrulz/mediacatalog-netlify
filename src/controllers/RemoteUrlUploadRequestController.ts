@@ -5,7 +5,7 @@ const _remoteUrlUploadRequestService = new RemoteUrlUploadRequestService();
 export class RemoteUrlUploadRequestController {
 
   public async list(req: Request, res: Response) {
-    const items = await _remoteUrlUploadRequestService.getItems(req.query['status'] as string);
+    const items = await _remoteUrlUploadRequestService.getItems(req.query['status'] as string, req.query['requestId'] as string);
     res.json(items);
   }
 
