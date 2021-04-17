@@ -38,4 +38,8 @@ export class RemoteUrlUploadRequestController {
     await _remoteUrlUploadRequestService.updateStatus(req.params.remoteUploadRequestId as string, 'completed', '');
     res.status(204).send();
   }
+  public async requeue(req: Request, res: Response) {
+    await _remoteUrlUploadRequestService.updateStatus(req.params.remoteUploadRequestId as string, 'queued', '');
+    res.status(204).send();
+  }
 }

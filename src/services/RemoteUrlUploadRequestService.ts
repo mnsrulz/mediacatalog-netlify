@@ -13,7 +13,7 @@ export class RemoteUrlUploadRequestService {
         const query: any = {};
         status && (query["status"] = status);
         requestId && (query["requestId"] = requestId);
-        var requests = await RemoteUrlUploadDataService.find(query);
+        var requests = await RemoteUrlUploadDataService.find(query).sort({ _id: -1 });
         return requests && requests.map((x: any) =>
             x.toObject({
                 transform: _transformer,
@@ -31,7 +31,7 @@ export class RemoteUrlUploadRequestService {
         throw new NotFoundException(id);
     }
 
-    public async updateStatus(id: string, status: 'running' | 'completed' | 'error', message: string): Promise<void> {
+    public async updateStatus(id: string, status: 'running' | 'completed' | 'error' | 'queued', message: string): Promise<void> {
         //apply some validations
         var request: any = await RemoteUrlUploadDataService.findById(id);
         if (request) {

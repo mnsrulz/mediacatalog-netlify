@@ -66,6 +66,7 @@ export class ApplicationRoutes {
     this.router.route("/remoteUrlUploadRequest/:remoteUploadRequestId/complete").post(asyncHandler(this.remoteUrlUploadRequestController.complete));
     this.router.route("/remoteUrlUploadRequest/:remoteUploadRequestId/error").post(asyncHandler(this.remoteUrlUploadRequestController.error));
     this.router.route("/remoteUrlUploadRequest/:remoteUploadRequestId/progress").post(asyncHandler(this.remoteUrlUploadRequestController.progress));
+    this.router.route("/remoteUrlUploadRequest/:remoteUploadRequestId/requeue").post(asyncHandler(this.remoteUrlUploadRequestController.requeue));
 
     this.router.route("/crawler/hdhub").get(asyncHandler(this.crawlerController.fetchLatestHdhub));
     this.router.route("/crawler/hdhub").post(asyncHandler(this.crawlerController.crawlHdhub));

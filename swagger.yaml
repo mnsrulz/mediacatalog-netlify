@@ -605,6 +605,20 @@ paths:
         responses:
           "204":
             description: "successful operation"
+  /remoteUrlUploadRequest/{remoteUploadRequestId}/requeue:
+      parameters:
+      - in: "path"
+        name: "remoteUploadRequestId"
+        required: true
+        schema:
+          type: string
+      post:
+        tags:
+          - "Remote Url Upload"
+        summary: "Create a new remote url upload request"
+        responses:
+          "204":
+            description: "successful operation"
   /remoteUrlUploadRequest/{remoteUploadRequestId}/error:
       parameters:
       - in: "path"
