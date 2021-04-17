@@ -2,7 +2,7 @@ import got from "got";
 
 export class GdriveWrapperService {
     public async createResumableFile(rootId: string, accessToken: string, fileName: string): Promise<string> {
-        const response = await got.post('https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable', {
+        const response = await got.post('https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&supportsAllDrives=true', {
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'X-Upload-Content-Type': getMimeType(fileName)
