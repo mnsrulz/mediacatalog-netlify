@@ -5,6 +5,7 @@ import { RemoteUrlUploadDataService } from "./DataServices";
 import { GdriveWrapperService } from './GdriveWrapperService';
 import config from '../configs/config';
 import { NotFoundException } from "../exceptions/exceptions";
+import path from 'path';
 
 const _gdriveWrapperService = new GdriveWrapperService();
 
@@ -71,7 +72,8 @@ export class RemoteUrlUploadRequestService {
 
         //if files are multiple it implies that this is a non raw upload type.
         for (const file of uploadRequest.files) {
-            const remoteUrl = await _gdriveWrapperService.createResumableFile(folderId, accessToken, file);
+            const fileName = path.basename(file);
+            const remoteUrl = await _gdriveWrapperService.createResumableFile(folderId, accessToken, fileName);
             const payload = {
                 requestId,
                 fileName: file,
