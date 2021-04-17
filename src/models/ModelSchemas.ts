@@ -45,7 +45,8 @@ export const RemoteUrlUploadRequestSchema = new Schema({
   remoteUrl: String,
   progress: {
     size: Number,
-    uploaded: Number
+    uploaded: Number,
+    updated: Date
   },
   rawUpload: Boolean
 }, { collection: "remoteUrlUploadRequest" });

@@ -50,7 +50,8 @@ export class RemoteUrlUploadRequestService {
         var request: any = await RemoteUrlUploadDataService.findById(id);
         const payloadToUpdate = {
             size: payload.size,
-            uploaded: payload.uploaded
+            uploaded: payload.uploaded,
+            updated: new Date()
         }
         if (request) {
             await RemoteUrlUploadDataService.updateOne({ _id: request._id }, {
