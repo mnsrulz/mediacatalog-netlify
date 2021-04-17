@@ -69,6 +69,7 @@ export class RemoteUrlUploadRequestService {
         const folderToCreate = `${uploadRequest.title} (${uploadRequest.year})`;
         const folderId = await _gdriveWrapperService.createFolder(folderName, accessToken, folderToCreate);
 
+        //if files are multiple it implies that this is a non raw upload type.
         for (const file of uploadRequest.files) {
             const remoteUrl = await _gdriveWrapperService.createResumableFile(folderId, accessToken, file);
             const payload = {
@@ -78,7 +79,8 @@ export class RemoteUrlUploadRequestService {
                 parentUrl: uploadRequest.parentUrl,
                 sequence: sequence++,
                 status: 'queued',
-                remoteUrl
+                remoteUrl,
+                rawUpload: uploadRequest.rawUpload
             };
             payloadArray.push(payload);
         }

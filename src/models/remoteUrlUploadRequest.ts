@@ -7,6 +7,7 @@ export interface RemoteUrlUploadRequest extends Document {
   mediaType: string;  
   title: string;
   year: string;
+  rawUpload: boolean;
 }
 
 export interface GetRemoteUrlUploadRequest {

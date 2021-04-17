@@ -914,6 +914,8 @@ components:
           type: "string"
         mediaType:
           type: "string"
+        rawUpload:
+          type: "boolean"
         files:
           type: "array"
           items:
