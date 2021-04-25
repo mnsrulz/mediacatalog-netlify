@@ -50,11 +50,12 @@ const getMimeType = (fileName: string) => {
 }
 
 const getFolderIdIfExists = async (rootId: string, accessToken: string, folderName: string): Promise<string | undefined> => {
+    let folderNameEscaped = folderName.replace('\'', '\\\'');
     const response = await got<DriveFileSearchResponse>('https://www.googleapis.com/drive/v3/files', {
         searchParams: {
             includeItemsFromAllDrives: true,
             supportsAllDrives: true,
-            q: `'${rootId}' in parents and mimeType = 'application/vnd.google-apps.folder' and name = '${folderName}'`
+            q: `'${rootId}' in parents and mimeType = 'application/vnd.google-apps.folder' and name = '${folderNameEscaped}'`
         },
         headers: {
             'Authorization': `Bearer ${accessToken}`
