@@ -8,6 +8,7 @@ export interface RemoteUrlUploadRequest extends Document {
   title: string;
   year: string;
   rawUpload: boolean;
+  fileUrlHeaders: Record<string, string>;
 }
 
 export interface GetRemoteUrlUploadRequest {
@@ -20,4 +21,5 @@ export interface GetRemoteUrlUploadRequest {
   status: string;
   message: string;
   parentUrl: string;
+  fileUrlHeaders: Record<string, string>;
 }

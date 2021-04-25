@@ -930,6 +930,8 @@ components:
           type: "string"
         rawUpload:
           type: "boolean"
+        fileUrlHeaders:
+          type: "object"
         files:
           type: "array"
           items:
