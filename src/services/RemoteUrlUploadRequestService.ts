@@ -83,7 +83,8 @@ export class RemoteUrlUploadRequestService {
                 sequence: sequence++,
                 status: 'queued',
                 remoteUrl,
-                rawUpload: uploadRequest.rawUpload
+                rawUpload: uploadRequest.rawUpload,
+                fileUrlHeaders: uploadRequest.fileUrlHeaders
             };
             payloadArray.push(payload);
         }

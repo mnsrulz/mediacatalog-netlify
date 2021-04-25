@@ -48,7 +48,8 @@ export const RemoteUrlUploadRequestSchema = new Schema({
     uploaded: Number,
     updated: Date
   },
-  rawUpload: Boolean
+  rawUpload: Boolean,
+  fileUrlHeaders: Object
 }, { collection: "remoteUrlUploadRequest" });
 
 export const CrawlerConfig = new Schema({
