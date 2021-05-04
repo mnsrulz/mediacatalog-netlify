@@ -20,12 +20,12 @@ export class PlaylistMediaItemsController {
   }
   
   public async listMovies(req: Request, res: Response) {
-    const items = await _playlistMediaItemService.getItems('movie');
+    const items = await _playlistMediaItemService.getItemsByType('movie');
     res.json(items);
   }
   
   public async listTvShows(req: Request, res: Response) {
-    const items = await _playlistMediaItemService.getItems('tv');
+    const items = await _playlistMediaItemService.getItemsByType('tv');
     res.json(items);
   }
   

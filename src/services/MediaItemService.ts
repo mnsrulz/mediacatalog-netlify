@@ -41,6 +41,18 @@ export class PlaylistMediaItemService {
       }) as MediaItem
     );
   }
+
+  public async getItemsByType(type?: MediaItemType): Promise<PagedRespone<MediaItem>> {
+    const items = await this.getItems(type);
+    return {
+      items,
+      total: 0,
+      count: items.length,
+      pageNumber: 1,
+      pageSize: 0
+    }
+  }
+
   public async getPlaylistItems(playlistId: String): Promise<PagedRespone<MediaItem>> {
     const query: any = {};
     if (playlistId) {
