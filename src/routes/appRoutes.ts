@@ -33,6 +33,8 @@ export class ApplicationRoutes {
 
     this.router.route("/playlists/hdhub/items").get(asyncHandler(this.playlistMediaItemsController.listHdhubItems));
     this.router.route("/playlists/extramovies/items").get(asyncHandler(this.playlistMediaItemsController.listExtraMoviesItems));
+    this.router.route("/playlists/movies/items").get(asyncHandler(this.playlistMediaItemsController.listMovies));
+    this.router.route("/playlists/tvshows/items").get(asyncHandler(this.playlistMediaItemsController.listTvShows));
     
     this.router.route("/playlists/trendingMovies/items").get(asyncHandler(this.playlistMediaItemsController.listTrendingMovies));
     this.router.route("/playlists/trendingTv/items").get(asyncHandler(this.playlistMediaItemsController.listTrendingTv));

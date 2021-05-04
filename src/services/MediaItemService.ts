@@ -12,6 +12,7 @@ import { GenericTransformer as playlistItemTransformer } from "../transformers/g
 
 const _tmdbWrapperService = new TmdbWrapperService();
 
+export type MediaItemType = 'movie' | 'tv';
 
 const knownExternalIdProviders = ["imdb", "tvdb", "tmdb"];
 export class PlaylistMediaItemService {
@@ -24,7 +25,7 @@ export class PlaylistMediaItemService {
     }
     throw new NotFoundException(mediaItemId);
   }
-  public async getItems(type?: string, search?: string): Promise<MediaItem[]> {
+  public async getItems(type?: MediaItemType, search?: string): Promise<MediaItem[]> {
     const query: any = {};
     if (type && ['movie', 'tv'].includes(type)) {
       query['itemType'] = type;

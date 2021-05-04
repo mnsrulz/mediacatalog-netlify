@@ -7,8 +7,10 @@ const hdhubPlaylist = { title: 'Hdhub', ts: new Date(2021, 1, 1), id: 'hdhub' } 
 const extramoviesPlaylist = { title: 'Extramovies', ts: new Date(2021, 1, 1), id: 'extramovies' } as unknown as Playlist
 const trendingMoviesPlaylist = { title: 'Trending Movies', ts: new Date(2021, 1, 1), id: 'trendingMovies' } as unknown as Playlist
 const trendingTvPlaylist = { title: 'Trending TV Shows', ts: new Date(2021, 1, 1), id: 'trendingTv' } as unknown as Playlist
+const tvPlaylist = { title: 'TV Shows', ts: new Date(2021, 1, 1), id: 'tvShows' } as unknown as Playlist
+const moviesPlaylist = { title: 'Movies', ts: new Date(2021, 1, 1), id: 'movies' } as unknown as Playlist
 
-const systemDefinedPlaylists = [hdhubPlaylist, extramoviesPlaylist, trendingMoviesPlaylist, trendingTvPlaylist]
+const systemDefinedPlaylists = [hdhubPlaylist, extramoviesPlaylist, trendingMoviesPlaylist, trendingTvPlaylist, moviesPlaylist, tvPlaylist];
 
 export class PlaylistService {
   public async getAll(includeSystemDefined = false): Promise<Playlist[]> {

@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { PlaylistMediaItemService } from "../services/MediaItemService";
+import { PlaylistMediaItemService, MediaItemType } from "../services/MediaItemService";
 const _playlistMediaItemService = new PlaylistMediaItemService();
 
 export class MediaItemsController {
   public async list(req: Request, res: Response) {    
-    const items = await _playlistMediaItemService.getItems(req.query.type as string, req.query.q as string);
+    const items = await _playlistMediaItemService.getItems(req.query.type as MediaItemType, req.query.q as string);
     res.json(items);
   }
 
