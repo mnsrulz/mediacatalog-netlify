@@ -34,7 +34,7 @@ export class PlaylistMediaItemService {
       query['title'] = new RegExp(search, 'i');
     }
 
-    var items = await MediaItemDataService.find(query).limit(100);
+    var items = await MediaItemDataService.find(query).sort('-_id').limit(100);
     return items && items.map((x: any) =>
       x.toObject({
         transform: playlistItemTransformer,
@@ -43,7 +43,13 @@ export class PlaylistMediaItemService {
   }
 
   public async getItemsByType(type?: MediaItemType): Promise<PagedRespone<MediaItem>> {
-    const items = await this.getItems(type);
+    const query = { itemType: type };
+    var itemsQuery = await MediaItemDataService.find(query).sort('-_id').limit(200);
+    const items = itemsQuery && itemsQuery.map(x =>
+      x.toObject({
+        transform: playlistItemTransformer,
+      }) as MediaItem
+    );
     return {
       items,
       total: 0,
