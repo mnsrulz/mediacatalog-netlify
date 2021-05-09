@@ -230,7 +230,15 @@ paths:
         - name: "q"
           in: "query"
           schema:
-            type: "string"
+            type: "string"        
+        - name: "year"
+          in: "query"
+          schema:
+            type: "number"        
+        - name: "limit"
+          in: "query"
+          schema:
+            type: "number"
       responses:
         "200":
           description: "successful operation"

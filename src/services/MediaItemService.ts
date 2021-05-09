@@ -25,16 +25,14 @@ export class PlaylistMediaItemService {
     }
     throw new NotFoundException(mediaItemId);
   }
-  public async getItems(type?: MediaItemType, search?: string): Promise<MediaItem[]> {
+  public async getItems(type?: MediaItemType, search?: string, year?: string, limit?: number): Promise<MediaItem[]> {
     const query: any = {};
-    if (type && ['movie', 'tv'].includes(type)) {
-      query['itemType'] = type;
-    }
-    if (search) {
-      query['title'] = new RegExp(search, 'i');
-    }
+    //filters
+    type && ['movie', 'tv'].includes(type) && (query['itemType'] = type);
+    search && (query['title'] = new RegExp(search, 'i'));
+    year && (query['year'] = year);
 
-    var items = await MediaItemDataService.find(query).sort('-_id').limit(100);
+    var items = await MediaItemDataService.find(query).sort('-_id').limit(limit || 100);
     return items && items.map((x: any) =>
       x.toObject({
         transform: playlistItemTransformer,
