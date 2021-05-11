@@ -4,10 +4,7 @@ const _playlistMediaItemService = new PlaylistMediaItemService();
 
 export class MediaItemsController {
   public async list(req: Request, res: Response) {
-    const items = await _playlistMediaItemService.getItems(req.query.type as MediaItemType,
-      req.query.q as string,
-      req.query.year as string,
-      parseInt(req.query.limit as string));
+    const items = await _playlistMediaItemService.getItems({ type: req.query.type as MediaItemType, search: req.query.q as string, year: req.query.year as string, limit: parseInt(req.query.limit as string), missingMeta: req.query.missingMeta as string });
     res.json(items);
   }
 
@@ -73,4 +70,10 @@ export class MediaItemsController {
     await _playlistMediaItemService.refreshMediaItemMetadata(req.params.mediaItemId);
     res.status(204).send();
   }
+
+  public async refreshMetadataOfAllMissingImdbIdOrTmdbItems(req: Request, res: Response) {
+    const numberOfItemsUpdated = await _playlistMediaItemService.refreshMetadataOfAllMissingImdbIdOrTmdbItems();
+    res.status(200).send(numberOfItemsUpdated);
+  }
+
 }

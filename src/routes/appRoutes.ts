@@ -48,6 +48,7 @@ export class ApplicationRoutes {
     this.router.route("/items/:mediaItemId").get(asyncHandler(this.mediaItemsController.get));
     this.router.route("/items/:mediaItemId").delete(asyncHandler(this.mediaItemsController.deleteMediaItem));
     this.router.route("/items/:mediaItemId/refreshMetadata").put(asyncHandler(this.mediaItemsController.refreshMediaItemMetadata));
+    this.router.route("/items/refreshMetadata").put(asyncHandler(this.mediaItemsController.refreshMetadataOfAllMissingImdbIdOrTmdbItems));
 
     this.router.route("/items/:mediaItemId/mediasources").get(asyncHandler(this.mediaSourceController.getByMediaItemId));    
 

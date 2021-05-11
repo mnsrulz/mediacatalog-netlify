@@ -239,6 +239,10 @@ paths:
           in: "query"
           schema:
             type: "number"
+        - name: "missingMeta"
+          in: "query"
+          schema:
+            type: "boolean"
       responses:
         "200":
           description: "successful operation"
@@ -298,6 +302,18 @@ paths:
           description: "successful operation"
         "404":
           description: "Media Item Id not found"
+  /items/refreshMetadata:
+    put:
+      tags:
+        - "mediaitems"
+      summary: "Refresh metadata of all media item whose imdbid or tmdbid is null"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                type: object
   /items/{mediaItemId}/refreshMetadata:
     put:
       tags:

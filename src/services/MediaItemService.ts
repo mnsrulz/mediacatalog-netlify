@@ -25,12 +25,13 @@ export class PlaylistMediaItemService {
     }
     throw new NotFoundException(mediaItemId);
   }
-  public async getItems(type?: MediaItemType, search?: string, year?: string, limit?: number): Promise<MediaItem[]> {
+  public async getItems({ type, search, year, limit, missingMeta }: { type?: MediaItemType; search?: string; year?: string; limit?: number; missingMeta?: string; } = {}): Promise<MediaItem[]> {
     const query: any = {};
     //filters
     type && ['movie', 'tv'].includes(type) && (query['itemType'] = type);
     search && (query['title'] = new RegExp(search, 'i'));
     year && (query['year'] = year);
+    missingMeta === 'true' && (query['$or'] = [{ 'imdbId': null }, { 'tmdbId': null }])
 
     var items = await MediaItemDataService.find(query).sort('-_id').limit(limit || 100);
     return items && items.map((x: any) =>
@@ -324,6 +325,14 @@ export class PlaylistMediaItemService {
     } else {
       throw new NotFoundException(mediaId);
     }
+  }
+
+  public async refreshMetadataOfAllMissingImdbIdOrTmdbItems() {
+    const mediaItems = await this.getItems({ missingMeta: 'true' });
+    for (const mediaItem of mediaItems) {
+      await this.refreshMediaItemMetadata(mediaItem.id);
+    }
+    return mediaItems.length;
   }
 
   public async markItemAsFavorite(
