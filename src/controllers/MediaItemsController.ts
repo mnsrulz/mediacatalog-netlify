@@ -73,7 +73,7 @@ export class MediaItemsController {
 
   public async refreshMetadataOfAllMissingImdbIdOrTmdbItems(req: Request, res: Response) {
     const numberOfItemsUpdated = await _playlistMediaItemService.refreshMetadataOfAllMissingImdbIdOrTmdbItems();
-    res.status(200).send(numberOfItemsUpdated);
+    res.status(200).send({numberOfItemsUpdated});
   }
 
 }
