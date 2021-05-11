@@ -308,6 +308,24 @@ export class PlaylistMediaItemService {
     return createdDocument._id;
   }
 
+  public async refreshMediaItemMetadata(mediaId: string) {
+    const doc = await MediaItemDataService.findById(mediaId);
+    if (doc) {
+      const { tmdbId, imdbId, itemType } = doc;
+      let metaInfo;
+      if (tmdbId) {
+        metaInfo = await _tmdbWrapperService.getByTmdbId(tmdbId, itemType);
+      } else if (imdbId) {
+        metaInfo = await _tmdbWrapperService.getByImdbId(imdbId);
+      } else {
+        throw new ValidationException(`Unable to fetch the imdbid or tmdbid info for given media item`);
+      }
+      await MediaItemDataService.updateOne({ _id: doc._id }, metaInfo);
+    } else {
+      throw new NotFoundException(mediaId);
+    }
+  }
+
   public async markItemAsFavorite(
     mediaId: string
   ): Promise<void> {

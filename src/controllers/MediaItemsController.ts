@@ -69,4 +69,8 @@ export class MediaItemsController {
     res.status(204).send({ id });
   }
 
+  public async refreshMediaItemMetadata(req: Request, res: Response) {
+    await _playlistMediaItemService.refreshMediaItemMetadata(req.params.mediaItemId);
+    res.status(204).send();
+  }
 }
