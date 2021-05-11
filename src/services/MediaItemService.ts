@@ -330,7 +330,11 @@ export class PlaylistMediaItemService {
   public async refreshMetadataOfAllMissingImdbIdOrTmdbItems() {
     const mediaItems = await this.getItems({ missingMeta: 'true' });
     for (const mediaItem of mediaItems) {
-      await this.refreshMediaItemMetadata(mediaItem.id);
+      try {
+        await this.refreshMediaItemMetadata(mediaItem.id);  
+      } catch (error) {
+        console.log('error occurred while refreshing metadata for media item ', mediaItem.id);
+      }      
     }
     return mediaItems.length;
   }
