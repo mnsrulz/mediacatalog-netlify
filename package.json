@@ -37,7 +37,7 @@
     "express-async-handler": "^1.1.4",
     "got": "^11.8.2",
     "mongodb-client-encryption": "^1.2.3",
-    "mongoose": "^5.12.9",
+    "mongoose": "^5.12.10",
     "netlify-lambda": "^2.0.6",
     "nodemon": "^2.0.7",
     "passport": "^0.4.1",
